@@ -10,8 +10,9 @@ import sys
 #####
 
 DIR_FIG = "figs"
-DIR_DATA = "data"
 DIR_RAW = "raw-data"
+DIR_DATA = "agg-data"
+DIR_STATS = "stats"
 
 FORMAT_LEGEND = dict(framealpha=1, handletextpad=0.5, edgecolor="black")
 

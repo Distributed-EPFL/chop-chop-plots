@@ -106,7 +106,7 @@ def plotCurve(ax, x, y, yerr, label, withShadedArea=True):
 ### Populate subplots
 def plotCurvesInFiles(fileList, labelList, ax, xColumn, yColumn, yColumnError):
     for i, file in enumerate(fileList):
-        csv = pd.read_csv(utils.DIR_DATA + "/" + file, index_col=0)
+        csv = pd.read_csv(utils.DIR_STATS + "/" + file, index_col=0)
         # print(csv)
         x = csv[xColumn]
         y = csv[yColumn]
@@ -138,7 +138,7 @@ def plotMotivation(fileCCHotstuff, fileCCBftsmart):
 
     ### One line for chopchop+bftsmart
     data = {}
-    csv = pd.read_csv(utils.DIR_DATA + "/" + fileCCBftsmart, index_col=0)
+    csv = pd.read_csv(utils.DIR_STATS + "/" + fileCCBftsmart, index_col=0)
     data["Chop Chop"] = csv["op avg"].max()
 
     keys = [k for k in data]
@@ -149,7 +149,7 @@ def plotMotivation(fileCCHotstuff, fileCCBftsmart):
 
     ### One line for chopchop+hotstuff
     # data = {}
-    # csv = pd.read_csv(utils.DIR_DATA + "/" + fileCCHotstuff, index_col=0)
+    # csv = pd.read_csv(utils.DIR_STATS + "/" + fileCCHotstuff, index_col=0)
     # data["Chop Chop + HotStuff"] = csv["op avg"].max()
 
     # keys = [k for k in data]
@@ -401,7 +401,7 @@ def plotPayloadSizesAx(ax, labels, filesComma, filesPayloadA, filesPayloadB, fil
         dataErr[label] = {}
 
         ### Payload syze = 8 is comma data
-        csv = pd.read_csv(utils.DIR_DATA + "/" + filesComma[i], index_col=0)
+        csv = pd.read_csv(utils.DIR_STATS + "/" + filesComma[i], index_col=0)
         p = "8"
         data[label][p] = csv["op avg"].max()
         if label.startswith("CC"):
@@ -414,7 +414,7 @@ def plotPayloadSizesAx(ax, labels, filesComma, filesPayloadA, filesPayloadB, fil
         for p, files in [("32", filesPayloadA[i]),
                     ("128", filesPayloadB[i]),
                     ("512", filesPayloadC[i])]:
-            csv = pd.read_csv(utils.DIR_DATA + "/" + files, index_col=0)
+            csv = pd.read_csv(utils.DIR_STATS + "/" + files, index_col=0)
             data[label][p] = csv["op avg"].max()
             if label.startswith("CC"):
                 ### Can only show statistically significant std for chopchop, not bftsmart or bullshark
@@ -452,7 +452,7 @@ def plotSystemSizesAx(ax, labels, filesSystemA, filesSystemB, filesSystemC, file
         for p, files in [("8", filesSystemA[i]),
                     ("16", filesSystemB[i]),
                     ("32", filesSystemC[i])]:
-            csv = pd.read_csv(utils.DIR_DATA + "/" + files, index_col=0)
+            csv = pd.read_csv(utils.DIR_STATS + "/" + files, index_col=0)
             data[label][p] = csv["op avg"].max()
             if label.startswith("CC"):
                 ### Can only show statistically significant std for chopchop, not bftsmart or bullshark
@@ -461,7 +461,7 @@ def plotSystemSizesAx(ax, labels, filesSystemA, filesSystemB, filesSystemC, file
                 dataErr[label][p] = 0
 
         ### System size = 64 is comma data
-        csv = pd.read_csv(utils.DIR_DATA + "/" + filesComma[i], index_col=0)
+        csv = pd.read_csv(utils.DIR_STATS + "/" + filesComma[i], index_col=0)
         p = "64"
         data[label][p] = csv["op avg"].max()
         if label.startswith("CC"):
@@ -496,13 +496,13 @@ def plotDistillationAx(ax, labels, filesNoFaults, filesFaults):
         dataErr[label] = {}
 
         ### 0% distillation
-        csv = pd.read_csv(utils.DIR_DATA + "/" + filesFaults[i], index_col=0)
+        csv = pd.read_csv(utils.DIR_STATS + "/" + filesFaults[i], index_col=0)
         for p in ["0%"]:
             data[label][p] = csv["op avg"].values[0]
             dataErr[label][p] = csv["op std"].values[0]
 
         ### 100% distillation is comma data
-        csv = pd.read_csv(utils.DIR_DATA + "/" + filesNoFaults[i], index_col=0)
+        csv = pd.read_csv(utils.DIR_STATS + "/" + filesNoFaults[i], index_col=0)
         p = "100%"
         data[label][p] = csv["op avg"].max()
         dataErr[label][p] = csv.loc[csv["op avg"] == data[label][p]]["op std"].values[0]
@@ -536,7 +536,7 @@ def plotAppsAx(ax, labels, filesAuction, filesPayments, filesPixelwar):
         for app, files in [("Auction", filesAuction[i]),
                     ("Payment", filesPayments[i]),
                     ("Pixelwar", filesPixelwar[i])]:
-            csv = pd.read_csv(utils.DIR_DATA + "/" + files, index_col=0)
+            csv = pd.read_csv(utils.DIR_STATS + "/" + files, index_col=0)
             data[label][app] = csv["op avg"].max()
             dataErr[label][app] = csv.loc[csv["op avg"] == data[label][app]]["op std"].values[0]
 
@@ -568,13 +568,13 @@ def plotServerFaultsAx(ax, labels, filesNoFaults, filesFaults):
         dataErr[label] = {}
 
         ### f = 0 is comma data
-        csv = pd.read_csv(utils.DIR_DATA + "/" + filesNoFaults[i], index_col=0)
+        csv = pd.read_csv(utils.DIR_STATS + "/" + filesNoFaults[i], index_col=0)
         p = "0"
         data[label][p] = csv["op avg"].max()
         dataErr[label][p] = csv.loc[ csv["op avg"] == data[label][p] ]["op std"].values[0]
 
         ### f = 1 and f = t
-        csv = pd.read_csv(utils.DIR_DATA + "/" + filesFaults[i], index_col=0)
+        csv = pd.read_csv(utils.DIR_STATS + "/" + filesFaults[i], index_col=0)
         for p in ["1", "threshold"]:
             data[label][p] = csv.loc[csv["nb-faults"] == p]["op avg"].values[0]
             dataErr[label][p] = csv.loc[csv["nb-faults"] == p]["op std"].values[0]
@@ -779,7 +779,7 @@ def plotLinerateThroughput(labelA, labelB, fileA, fileB):
         ("Network rate", "workload", "output rate B avg"),
         ("Output rate", "workload", "goodput rate B avg"),
         ]
-    csv = pd.read_csv(utils.DIR_DATA + "/" + fileA, index_col=0)
+    csv = pd.read_csv(utils.DIR_STATS + "/" + fileA, index_col=0)
     for label, xColumn, yColumn in plotConfig:
         # print(csv)
         x = csv[xColumn]
@@ -799,7 +799,7 @@ def plotLinerateThroughput(labelA, labelB, fileA, fileB):
         ("Network rate", "input", "output rate B avg", "output rate B std"),
         ("Output rate", "input", "goodput rate B avg", "goodput rate B std"),
         ]
-    csv = pd.read_csv(utils.DIR_DATA + "/" + fileB, index_col=0)
+    csv = pd.read_csv(utils.DIR_STATS + "/" + fileB, index_col=0)
     for label, xColumn, yColumn, yErrColumn in plotConfig:
         x = csv[xColumn]
         y = csv[yColumn]

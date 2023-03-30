@@ -840,7 +840,7 @@ def plotLinerateThroughput(labelA, labelB, fileA, fileB):
     ax[0].yaxis.set_major_locator(ticker.LogLocator(base=10, numticks=10))
     ax[0].yaxis.set_minor_locator(ticker.LogLocator(base=10, numticks=10, subs=[x/10 for x in range(1,10)]))
     ax[0].set_yticks([v*10**5 for v in [10**0, 10**1, 10**2, 10**3]])
-    ax[0].set_yticklabels([".1", "1", "10", "100"])
+    ax[0].set_yticklabels(["0.1", "1", "10", "100"])
 
     ### Ticks left plot
     ax[1].set_xlim(0*10**6, 62*10**6)

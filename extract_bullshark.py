@@ -369,7 +369,7 @@ class LogParser:
 
         estimated_tps = int(float(64)/float(len(self.received_samples)) * float(end_to_end_tps))
 
-	# 2022-12-10 PLR: export to json to make it easier to import and to add latency distribution
+        # PLR: export to json to make it easier to import and to add latency distribution
         json_data = {}
         json_data['throughput-avg'] = round(end_to_end_tps)
         json_data['latency-avg'] = round(true_end_to_end_latency)
@@ -454,6 +454,10 @@ class LogParser:
                 primaries += [f.read()]
         workers = []
         for filename in sorted(glob(join(directory, 'server_*.err'), recursive=True)):
+            with open(filename, 'r') as f:
+                workers += [f.read()]
+        # PLR: add both server and worker logs to consider all throughput
+        for filename in sorted(glob(join(directory, 'worker_*.err'), recursive=True)):
             with open(filename, 'r') as f:
                 workers += [f.read()]
 

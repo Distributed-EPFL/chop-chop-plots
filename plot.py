@@ -888,15 +888,15 @@ if __name__ == "__main__":
     # plotCommaSingle(labels, files)
 
     ### Comma plot split in several subplots
-    labelsA = ["HotStuff", "BFT-SMaRt"]
-    labelsB = ["NW+Bullshark+sig"]
-    labelsC = ["NW+Bullshark"]
-    labelsD = ["CC+HotStuff", "CC+BFT-SMaRt"]
-    filesA = ["comma-hotstuff.csv", "comma-bftsmart.csv"]
-    filesB = ["comma-bullshark-sig.csv"]
-    filesC = ["comma-bullshark.csv"]
-    filesD = ["comma-chopchop-hotstuff.csv", "comma-chopchop-bftsmart.csv"]
-    plotCommaSplit(labelsA, labelsB, labelsC, labelsD, filesA, filesB, filesC, filesD)
+    commaLabelsA = ["HotStuff", "BFT-SMaRt"]
+    commaLabelsB = ["NW+Bullshark+sig"]
+    commaLabelsC = ["NW+Bullshark"]
+    commaLabelsD = ["CC+HotStuff", "CC+BFT-SMaRt"]
+    commaFilesA = ["comma-hotstuff.csv", "comma-bftsmart.csv"]
+    commaFilesB = ["comma-bullshark-sig.csv"]
+    commaFilesC = ["comma-bullshark.csv"]
+    commaFilesD = ["comma-chopchop-hotstuff.csv", "comma-chopchop-bftsmart.csv"]
+    plotCommaSplit(commaLabelsA, commaLabelsB, commaLabelsC, commaLabelsD, commaFilesA, commaFilesB, commaFilesC, commaFilesD)
 
     ### Payload sizes
     payloadLabels = ["CC+HotStuff", "CC+BFT-SMaRt", "NW+Bullshark+sig"]

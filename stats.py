@@ -340,3 +340,7 @@ if __name__ == "__main__":
     ### Linerate plot
     parseLinerateChopchop("raw-data/linerate-chopchop.json")
     parseBaselinesGeneric("linerate", "workload", "bullshark-sig", utils.DIR_RAW + "/linerate-64-bullshark-sig", withByteRate=True)
+
+    ### Matching trusted and untrusted CPU for bullshark
+    parseChopchopGeneric("matching-trusted-192", utils.DIR_RAW + "/matching-trusted-throughput.json", utils.DIR_RAW + "/matching-trusted-latency.json")
+    parseBaselinesGeneric("matching-trusted-192", "system", "bullshark-sig", utils.DIR_RAW + "/matching-trusted-bullshark-sig")

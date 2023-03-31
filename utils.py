@@ -10,7 +10,6 @@ import sys
 #####
 
 DIR_FIG = "figs"
-DIR_RAW = "raw-data"
 DIR_DATA = "agg-data"
 DIR_STATS = "stats"
 

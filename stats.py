@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+### Transform data distribution into statistics data
 
 import json
 import io
@@ -115,7 +116,7 @@ def parseChopchopGeneric(csvPrefix, throughputFile, latencyFile):
             dfOut = pd.concat([dfOut, dfRow])
 
         # print(dfOut["lat avg"])
-        fileOut = utils.DIR_DATA + "/{}-chopchop-{}.csv".format(csvPrefix, system)
+        fileOut = utils.DIR_STATS + "/{}-chopchop-{}.csv".format(csvPrefix, system)
         dfOut.to_csv(fileOut)
         print("Generated {}".format(fileOut))
 
@@ -210,7 +211,7 @@ def parseBaselinesGeneric(csvPrefix, parameterKey, system, dataDir, latencyFacto
 
         dfOut = pd.concat([dfOut, dfRow])
 
-    fileOut = utils.DIR_DATA + "/{}-{}.csv".format(csvPrefix, system)
+    fileOut = utils.DIR_STATS + "/{}-{}.csv".format(csvPrefix, system)
     dfOut.to_csv(fileOut)
     print("Generated {}".format(fileOut))
 
@@ -247,7 +248,7 @@ def parseServerFaults(throughputFile, latencyFile):
             dfOut = pd.concat([dfOut, dfRow])
 
         # print(dfOut)
-        fileOut = utils.DIR_DATA + "/faults-chopchop-{}.csv".format(system)
+        fileOut = utils.DIR_STATS + "/faults-chopchop-{}.csv".format(system)
         dfOut.to_csv(fileOut)
         print("Generated {}".format(fileOut))
 
@@ -298,7 +299,7 @@ def parseLinerateChopchop(file):
         # print(dfOut["op avg"])
         print(dfOut["goodput ratio avg"])
         # print(dfOut)
-        fileOut = utils.DIR_DATA + "/linerate-chopchop-{}.csv".format(system)
+        fileOut = utils.DIR_STATS + "/linerate-chopchop-{}.csv".format(system)
         dfOut.to_csv(fileOut)
         print("Generated {}".format(fileOut))
 
@@ -308,39 +309,38 @@ def parseLinerateChopchop(file):
 ##### Main
 #####
 
-### Transform raw data distribution into statistics data
 if __name__ == "__main__":
     ### Comma plot
-    parseChopchopGeneric("comma", utils.DIR_RAW + "/comma-chopchop-throughput.json", utils.DIR_RAW + "/comma-chopchop-latency.json")
-    parseBaselinesGeneric("comma", "workload", "bullshark", utils.DIR_RAW + "/comma-64-bullshark")
-    parseBaselinesGeneric("comma", "workload", "bullshark-sig", utils.DIR_RAW + "/comma-64-bullshark-sig")
-    parseBaselinesGeneric("comma", "workload", "bftsmart", utils.DIR_RAW + "/comma-64-bftsmart", latencyFactor=1) # bftsmart is already in millisec, no need to multiply
-    parseBaselinesGeneric("comma", "workload", "hotstuff", utils.DIR_RAW + "/comma-64-hotstuff")
+    parseChopchopGeneric("comma", utils.DIR_DATA + "/comma-chopchop-throughput.json", utils.DIR_DATA + "/comma-chopchop-latency.json")
+    parseBaselinesGeneric("comma", "workload", "bullshark", utils.DIR_DATA + "/comma-64-bullshark")
+    parseBaselinesGeneric("comma", "workload", "bullshark-sig", utils.DIR_DATA + "/comma-64-bullshark-sig")
+    parseBaselinesGeneric("comma", "workload", "bftsmart", utils.DIR_DATA + "/comma-64-bftsmart", latencyFactor=1) # bftsmart is already in millisec, no need to multiply
+    parseBaselinesGeneric("comma", "workload", "hotstuff", utils.DIR_DATA + "/comma-64-hotstuff")
 
     ### Server faults plot
     parseServerFaults("raw-data/faults-throughput.json", "raw-data/faults-latency.json")
 
     ### Applications plot
     for app in ["auction", "payment", "pixelwar"]:
-        parseChopchopGeneric("app-{}".format(app), utils.DIR_RAW + "/app-{}-throughput.json".format(app), utils.DIR_RAW + "/app-{}-latency.json".format(app))
+        parseChopchopGeneric("app-{}".format(app), utils.DIR_DATA + "/app-{}-throughput.json".format(app), utils.DIR_DATA + "/app-{}-latency.json".format(app))
 
     ### Payload sizes plot
     for size in ["032", "128", "512"]:
-        parseChopchopGeneric("payload-{}".format(size), utils.DIR_RAW + "/payload-{}-throughput.json".format(size), utils.DIR_RAW + "/payload-{}-latency.json".format(size))
-        parseBaselinesGeneric("payload-{}".format(size), "payload", "bullshark-sig", utils.DIR_RAW + "/payload-sizes-bullshark-sig-{}".format(size))
+        parseChopchopGeneric("payload-{}".format(size), utils.DIR_DATA + "/payload-{}-throughput.json".format(size), utils.DIR_DATA + "/payload-{}-latency.json".format(size))
+        parseBaselinesGeneric("payload-{}".format(size), "payload", "bullshark-sig", utils.DIR_DATA + "/payload-sizes-bullshark-sig-{}".format(size))
 
     ### System sizes plot
     for size in ["08", "16", "32"]:
-        parseChopchopGeneric("system-{}".format(size), utils.DIR_RAW + "/system-{}-throughput.json".format(size), utils.DIR_RAW + "/system-{}-latency.json".format(size))
-        parseBaselinesGeneric("system-{}".format(size), "system", "bullshark-sig", utils.DIR_RAW + "/system-sizes-bullshark-sig-{}".format(size))
+        parseChopchopGeneric("system-{}".format(size), utils.DIR_DATA + "/system-{}-throughput.json".format(size), utils.DIR_DATA + "/system-{}-latency.json".format(size))
+        parseBaselinesGeneric("system-{}".format(size), "system", "bullshark-sig", utils.DIR_DATA + "/system-sizes-bullshark-sig-{}".format(size))
 
     ### Reduction plot when clients crash
-    parseChopchopGeneric("reduction-00", utils.DIR_RAW + "/reduction-0-throughput.json", utils.DIR_RAW + "/reduction-0-latency.json")
+    parseChopchopGeneric("reduction-00", utils.DIR_DATA + "/reduction-0-throughput.json", utils.DIR_DATA + "/reduction-0-latency.json")
 
     ### Linerate plot
     parseLinerateChopchop("raw-data/linerate-chopchop.json")
-    parseBaselinesGeneric("linerate", "workload", "bullshark-sig", utils.DIR_RAW + "/linerate-64-bullshark-sig", withByteRate=True)
+    parseBaselinesGeneric("linerate", "workload", "bullshark-sig", utils.DIR_DATA + "/linerate-64-bullshark-sig", withByteRate=True)
 
     ### Matching trusted and untrusted CPU for bullshark
-    parseChopchopGeneric("matching-trusted-192", utils.DIR_RAW + "/matching-trusted-throughput.json", utils.DIR_RAW + "/matching-trusted-latency.json")
-    parseBaselinesGeneric("matching-trusted-192", "system", "bullshark-sig", utils.DIR_RAW + "/matching-trusted-bullshark-sig")
+    parseChopchopGeneric("matching-trusted-192", utils.DIR_DATA + "/matching-trusted-throughput.json", utils.DIR_DATA + "/matching-trusted-latency.json")
+    parseBaselinesGeneric("matching-trusted-192", "system", "bullshark-sig", utils.DIR_DATA + "/matching-trusted-bullshark-sig")

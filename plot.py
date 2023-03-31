@@ -614,6 +614,77 @@ def plotServerFaults(labels, filesNoFaults, filesFaults):
     utils.saveFig("server-faults")
 
 
+def plotMatchingTrustedResourcesAx(ax, labelsAB, filesA, filesB, labelCD, filesC, filesD):
+    ### Kind of manually reconstruct the data
+    data = {}
+    dataErr = {}
+
+    ### Chopchop
+    for i, label in enumerate(labelsAB):
+        data[label] = {}
+        dataErr[label] = {}
+
+        ### First cluster of bars is chopchop comma data
+        p = "1"
+        csv = pd.read_csv(utils.DIR_STATS + "/" + filesA[i], index_col=0)
+        data[label][p] = csv["op avg"].max()
+        dataErr[label][p] = csv.loc[ csv["op avg"] == data[label][p] ]["op std"].values[0]
+
+        ### Second cluster of bars is chopchop with only honest brokers (no load brokers)
+        p = "2"
+        csv = pd.read_csv(utils.DIR_STATS + "/" + filesB[i], index_col=0)
+        data[label][p] = csv["op avg"].max()
+        dataErr[label][p] = csv.loc[ csv["op avg"] == data[label][p] ]["op std"].values[0]
+
+        ### Fill third and fourth clusters with empty values for bullshark
+        for p in [3, 4]:
+            data[label][p] = 0
+            dataErr[label][p] = 0
+
+    ### Bullshark
+    label = labelCD
+    data[label] = {}
+    dataErr[label] = {}
+
+    ### Fill first and second clusters with empty values for bullshark
+    for p in [1, 2]:
+        data[label][p] = 0
+
+    ### No error bars on bullshark
+    for p in [1, 2, 3, 4]:
+        dataErr[label][p] = 0
+
+    ### Third cluster of bars is bullshark with 2x workers
+    csv = pd.read_csv(utils.DIR_STATS + "/" + fileC, index_col=0)
+    data[label]["3"] = csv["op avg"].max()
+
+    ### Fourth cluster of bars is bullshark comma data
+    csv = pd.read_csv(utils.DIR_STATS + "/" + fileD, index_col=0)
+    data[label]["4"] = csv["op avg"].max()
+
+    # print(data)
+    ax = barplot(ax, data, dataErr)
+
+
+def plotMatchingTrustedResources(labelsAB, filesA, filesB, labelCD, filesC, filesD):
+    fig, ax = plt.subplots(1, 1, **utils.FIG_SIZE_ONE_COL_SMALL)
+    utils.commonFigFormat(ax)
+
+    plotMatchingTrustedResourcesAx(ax, labelsAB, filesA, filesB, labelCD, filesC, filesD)
+    decorateBarPlotLog(ax)
+
+    ### Labels
+    # ax.set_xlabel("")
+    # ax.set_ylabel("Throughput [Mop/s]", loc="top")
+    ax.set_ylabel("Throughput\n[Mop/s, log]", loc="center")
+
+    ### Ticks
+    ax.set_xticklabels(["64 s\n$\\infty$ m", "64 s\n128 m", "64 s\n128 m", "64 s\n  64 m"])
+
+    ax.legend(**utils.FORMAT_LEGEND, ncol=1, columnspacing=1, loc='center', bbox_to_anchor=(1.55, 0.5))
+    utils.saveFig("matching-trusted-resources")
+
+
 def plotLinerateRatio(labels, files):
     fig, ax = plt.subplots(1, 1, **utils.FIG_SIZE_ONE_COL)
     utils.commonFigFormat(ax)
@@ -940,6 +1011,15 @@ if __name__ == "__main__":
     filesNoFaults = ["comma-chopchop-hotstuff.csv", "comma-chopchop-bftsmart.csv"] # f=0
     filesFaults = ["faults-chopchop-hotstuff.csv", "faults-chopchop-bftsmart.csv"]
     plotServerFaults(labels, filesNoFaults, filesFaults)
+
+    ### Matching trusted resources
+    labelsAB = ["CC+HotStuff", "CC+BFT-SMaRt"]
+    filesA = ["comma-chopchop-hotstuff.csv", "comma-chopchop-bftsmart.csv"]
+    filesB = ["matching-trusted-192-chopchop-hotstuff.csv", "matching-trusted-192-chopchop-bftsmart.csv"]
+    labelCD = "NW+Bullshark+sig"
+    fileC = "matching-trusted-192-bullshark-sig.csv"
+    fileD = "comma-bullshark-sig.csv"
+    plotMatchingTrustedResources(labelsAB, filesA, filesB, labelCD, fileC, fileD)
 
     ### Linerate
     labelA = "NW+Bullshark+sig"

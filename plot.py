@@ -23,9 +23,9 @@ import utils
 
 BAR_FORMAT = {
     ### Eval plots
-    "CC+BFT-SMaRt": {"hatch": "/", "facecolor": "white", "edgecolor": "tab:blue"},
-    "CC+HotStuff": {"hatch": "x", "facecolor": "white", "edgecolor": "tab:red"},
-    "NW+Bullshark+sig": {"hatch": "O", "facecolor": "white", "edgecolor": "tab:green"},
+    "CC-BFT-SMaRt": {"hatch": "/", "facecolor": "white", "edgecolor": "tab:blue"},
+    "CC-HotStuff": {"hatch": "x", "facecolor": "white", "edgecolor": "tab:red"},
+    "NW-Bullshark-sig": {"hatch": "O", "facecolor": "white", "edgecolor": "tab:green"},
 
     ### Motivation plot
     "motivation-service": {"hatch": "", "facecolor": "white", "edgecolor": "black"},
@@ -33,10 +33,10 @@ BAR_FORMAT = {
 
 LINE_FORMAT = {
     ### Comma
-    "CC+BFT-SMaRt": {"marker": "|", "linestyle": "solid", "color": "tab:blue"},
-    "CC+HotStuff": {"marker": "x", "linestyle": "dashed", "color": "tab:red"},
-    "NW+Bullshark": {"marker": "^", "linestyle": "dashdot", "color": "tab:orange"}, # tab:purple
-    "NW+Bullshark+sig": {"marker": "v", "linestyle": "dotted", "color": "tab:green"},
+    "CC-BFT-SMaRt": {"marker": "|", "linestyle": "solid", "color": "tab:blue"},
+    "CC-HotStuff": {"marker": "x", "linestyle": "dashed", "color": "tab:red"},
+    "NW-Bullshark": {"marker": "^", "linestyle": "dashdot", "color": "tab:orange"}, # tab:purple
+    "NW-Bullshark-sig": {"marker": "v", "linestyle": "dotted", "color": "tab:green"},
     "BFT-SMaRt": {"marker": "D", "linestyle": "solid", "color": "darkblue"},
     "HotStuff": {"marker": "s", "linestyle": "dashed", "color": "darkred"},
 
@@ -145,7 +145,7 @@ def plotMotivation(fileCCHotstuff, fileCCBftsmart):
     values = [v for v in data.values()]
     ax.barh(keys, values, label='',
         align='center', height=0.8,
-        **BAR_FORMAT["CC+BFT-SMaRt"])
+        **BAR_FORMAT["CC-BFT-SMaRt"])
 
     ### One line for chopchop+hotstuff
     # data = {}
@@ -156,7 +156,7 @@ def plotMotivation(fileCCHotstuff, fileCCBftsmart):
     # values = [v for v in data.values()]
     # ax.barh(keys, values, label='',
     #     align='center', height=0.8,
-    #     **BAR_FORMAT["CC+HotStuff"])
+    #     **BAR_FORMAT["CC-HotStuff"])
 
     ### Throughput / second
     data = {}
@@ -952,17 +952,17 @@ if __name__ == "__main__":
     plotMotivation("comma-chopchop-bftsmart.csv", "comma-chopchop-hotstuff.csv")
 
     ### Comma plot single subplot
-    # labels = ["CC+BFT-SMaRt", "CC+HotStuff"]
+    # labels = ["CC-BFT-SMaRt", "CC-HotStuff"]
     # files = ["comma-chopchop-bftsmart.csv", "comma-chopchop-hotstuff.csv"]
-    # labels = ["CC+BFT-SMaRt", "CC+HotStuff", "NW+Bullshark", "NW+Bullshark+sig"]
+    # labels = ["CC-BFT-SMaRt", "CC-HotStuff", "NW-Bullshark", "NW-Bullshark-sig"]
     # files = ["comma-chopchop-bftsmart.csv", "comma-chopchop-hotstuff.csv", "comma-bullshark.csv", "comma-bullshark-sig.csv"]
     # plotCommaSingle(labels, files)
 
     ### Comma plot split in several subplots
     commaLabelsA = ["HotStuff", "BFT-SMaRt"]
-    commaLabelsB = ["NW+Bullshark+sig"]
-    commaLabelsC = ["NW+Bullshark"]
-    commaLabelsD = ["CC+HotStuff", "CC+BFT-SMaRt"]
+    commaLabelsB = ["NW-Bullshark-sig"]
+    commaLabelsC = ["NW-Bullshark"]
+    commaLabelsD = ["CC-HotStuff", "CC-BFT-SMaRt"]
     commaFilesA = ["comma-hotstuff.csv", "comma-bftsmart.csv"]
     commaFilesB = ["comma-bullshark-sig.csv"]
     commaFilesC = ["comma-bullshark.csv"]
@@ -970,7 +970,7 @@ if __name__ == "__main__":
     plotCommaSplit(commaLabelsA, commaLabelsB, commaLabelsC, commaLabelsD, commaFilesA, commaFilesB, commaFilesC, commaFilesD)
 
     ### Payload sizes
-    payloadLabels = ["CC+HotStuff", "CC+BFT-SMaRt", "NW+Bullshark+sig"]
+    payloadLabels = ["CC-HotStuff", "CC-BFT-SMaRt", "NW-Bullshark-sig"]
     payloadFilesA = ["comma-chopchop-hotstuff.csv", "comma-chopchop-bftsmart.csv", "comma-bullshark-sig.csv"] # payload size = 8
     payloadFilesB = ["payload-032-{}.csv".format(s) for s in ["chopchop-hotstuff", "chopchop-bftsmart", "bullshark-sig"]]
     payloadFilesC = ["payload-128-{}.csv".format(s) for s in ["chopchop-hotstuff", "chopchop-bftsmart", "bullshark-sig"]]
@@ -978,7 +978,7 @@ if __name__ == "__main__":
     plotPayloadSizes(payloadLabels, payloadFilesA, payloadFilesB, payloadFilesC, payloadFilesD)
 
     ### System sizes
-    systemLabels = ["CC+HotStuff", "CC+BFT-SMaRt", "NW+Bullshark+sig"]
+    systemLabels = ["CC-HotStuff", "CC-BFT-SMaRt", "NW-Bullshark-sig"]
     systemFilesA = ["system-08-{}.csv".format(s) for s in ["chopchop-hotstuff", "chopchop-bftsmart", "bullshark-sig"]]
     systemFilesB = ["system-16-{}.csv".format(s) for s in ["chopchop-hotstuff", "chopchop-bftsmart", "bullshark-sig"]]
     systemFilesC = ["system-32-{}.csv".format(s) for s in ["chopchop-hotstuff", "chopchop-bftsmart", "bullshark-sig"]]
@@ -986,13 +986,13 @@ if __name__ == "__main__":
     plotSystemSizes(systemLabels, systemFilesA, systemFilesB, systemFilesC, systemFilesD)
 
     ### Distillation = when client crash
-    distillationLabels = ["CC+HotStuff", "CC+BFT-SMaRt"]
+    distillationLabels = ["CC-HotStuff", "CC-BFT-SMaRt"]
     distillationFilesNoFaults = ["comma-chopchop-hotstuff.csv", "comma-chopchop-bftsmart.csv"] # 100% reduction
     distillationFilesFaults = ["reduction-00-chopchop-hotstuff.csv", "reduction-00-chopchop-bftsmart.csv"]
     plotDistillation(distillationLabels, distillationFilesNoFaults, distillationFilesFaults)
 
     ### Applications
-    appLabels = ["CC+HotStuff", "CC+BFT-SMaRt"]
+    appLabels = ["CC-HotStuff", "CC-BFT-SMaRt"]
     appFilesA = ["app-auction-chopchop-hotstuff.csv", "app-auction-chopchop-bftsmart.csv"]
     appFilesB = ["app-payment-chopchop-hotstuff.csv", "app-payment-chopchop-bftsmart.csv"]
     appFilesC = ["app-pixelwar-chopchop-hotstuff.csv", "app-pixelwar-chopchop-bftsmart.csv"]
@@ -1007,23 +1007,23 @@ if __name__ == "__main__":
         )
 
     ### Server crashes with f = {0, 1, t}
-    labels = ["CC+HotStuff", "CC+BFT-SMaRt"]
+    labels = ["CC-HotStuff", "CC-BFT-SMaRt"]
     filesNoFaults = ["comma-chopchop-hotstuff.csv", "comma-chopchop-bftsmart.csv"] # f=0
     filesFaults = ["faults-chopchop-hotstuff.csv", "faults-chopchop-bftsmart.csv"]
     plotServerFaults(labels, filesNoFaults, filesFaults)
 
     ### Matching trusted resources
-    labelsAB = ["CC+HotStuff", "CC+BFT-SMaRt"]
+    labelsAB = ["CC-HotStuff", "CC-BFT-SMaRt"]
     filesA = ["comma-chopchop-hotstuff.csv", "comma-chopchop-bftsmart.csv"]
     filesB = ["matching-trusted-192-chopchop-hotstuff.csv", "matching-trusted-192-chopchop-bftsmart.csv"]
-    labelCD = "NW+Bullshark+sig"
+    labelCD = "NW-Bullshark-sig"
     fileC = "matching-trusted-192-bullshark-sig.csv"
     fileD = "comma-bullshark-sig.csv"
     plotMatchingTrustedResources(labelsAB, filesA, filesB, labelCD, fileC, fileD)
 
     ### Linerate
-    labelA = "NW+Bullshark+sig"
-    labelB = "CC+BFT-SMaRt"
+    labelA = "NW-Bullshark-sig"
+    labelB = "CC-BFT-SMaRt"
     fileA = "linerate-bullshark-sig.csv"
     fileB = "linerate-chopchop-bftsmart.csv"
     # fileB = ["linerate-chopchop-hotstuff.csv"]

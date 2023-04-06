@@ -199,7 +199,7 @@ def plotMotivation(fileCCHotstuff, fileCCBftsmart):
     # ax.set_xlim(135*1000, 0)
 
 
-def plotCommaSingle(labelList, fileList):
+def _plotCommaSingle(labelList, fileList):
     fig, ax = plt.subplots(1, 1, **utils.FIG_SIZE_ONE_COL)
     utils.commonFigFormat(ax)
 
@@ -426,7 +426,7 @@ def plotPayloadSizesAx(ax, labels, filesComma, filesPayloadA, filesPayloadB, fil
     ax = barplot(ax, data, dataErr)
 
 
-def plotPayloadSizes(labels, filesComma, filesPayloadA, filesPayloadB, filesPayloadC):
+def _plotPayloadSizes(labels, filesComma, filesPayloadA, filesPayloadB, filesPayloadC):
     fig, ax = plt.subplots(1, 1, **utils.FIG_SIZE_ONE_COL_SMALL)
     utils.commonFigFormat(ax)
 
@@ -473,7 +473,7 @@ def plotSystemSizesAx(ax, labels, filesSystemA, filesSystemB, filesSystemC, file
     ax = barplot(ax, data, dataErr)
 
 
-def plotSystemSizes(labels, filesSystemA, filesSystemB, filesSystemC, filesComma):
+def _plotSystemSizes(labels, filesSystemA, filesSystemB, filesSystemC, filesComma):
     fig, ax = plt.subplots(1, 1, **utils.FIG_SIZE_ONE_COL_SMALL)
     utils.commonFigFormat(ax)
 
@@ -511,7 +511,7 @@ def plotDistillationAx(ax, labels, filesNoFaults, filesFaults):
     ax = barplot(ax, data, dataErr)
 
 
-def plotDistillation(labels, filesNoFaults, filesFaults):
+def _plotDistillation(labels, filesNoFaults, filesFaults):
     fig, ax = plt.subplots(1, 1, **utils.FIG_SIZE_ONE_COL_SMALL)
     utils.commonFigFormat(ax)
 
@@ -544,7 +544,7 @@ def plotAppsAx(ax, labels, filesAuction, filesPayments, filesPixelwar):
     ax = barplot(ax, data, dataErr)
 
 
-def plotApps(labels, filesAuction, filesPayments, filesPixelwar):
+def _plotApps(labels, filesAuction, filesPayments, filesPixelwar):
     fig, ax = plt.subplots(1, 1, **utils.FIG_SIZE_ONE_COL_SMALL)
     utils.commonFigFormat(ax)
 
@@ -583,7 +583,7 @@ def plotServerFaultsAx(ax, labels, filesNoFaults, filesFaults):
     ax = barplot(ax, data, dataErr)
 
 
-def plotServerFaults(labels, filesNoFaults, filesFaults):
+def _plotServerFaults(labels, filesNoFaults, filesFaults):
     fig, ax = plt.subplots(1, 1, **utils.FIG_SIZE_ONE_COL_SMALL)
     utils.commonFigFormat(ax)
 
@@ -685,7 +685,7 @@ def plotMatchingTrustedResources(labelsAB, filesA, filesB, labelCD, filesC, file
     utils.saveFig("matching-trusted-resources")
 
 
-def plotLinerateRatio(labels, files):
+def _plotLinerateRatio(labels, files):
     fig, ax = plt.subplots(1, 1, **utils.FIG_SIZE_ONE_COL)
     utils.commonFigFormat(ax)
 
@@ -956,7 +956,7 @@ if __name__ == "__main__":
     # files = ["comma-chopchop-bftsmart.csv", "comma-chopchop-hotstuff.csv"]
     # labels = ["CC-BFT-SMaRt", "CC-HotStuff", "NW-Bullshark", "NW-Bullshark-sig"]
     # files = ["comma-chopchop-bftsmart.csv", "comma-chopchop-hotstuff.csv", "comma-bullshark.csv", "comma-bullshark-sig.csv"]
-    # plotCommaSingle(labels, files)
+    # _plotCommaSingle(labels, files)
 
     ### Comma plot split in several subplots
     commaLabelsA = ["HotStuff", "BFT-SMaRt"]
@@ -975,7 +975,7 @@ if __name__ == "__main__":
     payloadFilesB = ["payload-032-{}.csv".format(s) for s in ["chopchop-hotstuff", "chopchop-bftsmart", "bullshark-sig"]]
     payloadFilesC = ["payload-128-{}.csv".format(s) for s in ["chopchop-hotstuff", "chopchop-bftsmart", "bullshark-sig"]]
     payloadFilesD = ["payload-512-{}.csv".format(s) for s in ["chopchop-hotstuff", "chopchop-bftsmart", "bullshark-sig"]]
-    plotPayloadSizes(payloadLabels, payloadFilesA, payloadFilesB, payloadFilesC, payloadFilesD)
+    # _plotPayloadSizes(payloadLabels, payloadFilesA, payloadFilesB, payloadFilesC, payloadFilesD)
 
     ### System sizes
     systemLabels = ["CC-HotStuff", "CC-BFT-SMaRt", "NW-Bullshark-sig"]
@@ -983,22 +983,22 @@ if __name__ == "__main__":
     systemFilesB = ["system-16-{}.csv".format(s) for s in ["chopchop-hotstuff", "chopchop-bftsmart", "bullshark-sig"]]
     systemFilesC = ["system-32-{}.csv".format(s) for s in ["chopchop-hotstuff", "chopchop-bftsmart", "bullshark-sig"]]
     systemFilesD = ["comma-chopchop-hotstuff.csv", "comma-chopchop-bftsmart.csv", "comma-bullshark-sig.csv"] # system size = 64
-    plotSystemSizes(systemLabels, systemFilesA, systemFilesB, systemFilesC, systemFilesD)
+    # _plotSystemSizes(systemLabels, systemFilesA, systemFilesB, systemFilesC, systemFilesD)
 
     ### Distillation = when client crash
     distillationLabels = ["CC-HotStuff", "CC-BFT-SMaRt"]
     distillationFilesNoFaults = ["comma-chopchop-hotstuff.csv", "comma-chopchop-bftsmart.csv"] # 100% reduction
     distillationFilesFaults = ["reduction-00-chopchop-hotstuff.csv", "reduction-00-chopchop-bftsmart.csv"]
-    plotDistillation(distillationLabels, distillationFilesNoFaults, distillationFilesFaults)
+    # _plotDistillation(distillationLabels, distillationFilesNoFaults, distillationFilesFaults)
 
     ### Applications
     appLabels = ["CC-HotStuff", "CC-BFT-SMaRt"]
     appFilesA = ["app-auction-chopchop-hotstuff.csv", "app-auction-chopchop-bftsmart.csv"]
     appFilesB = ["app-payment-chopchop-hotstuff.csv", "app-payment-chopchop-bftsmart.csv"]
     appFilesC = ["app-pixelwar-chopchop-hotstuff.csv", "app-pixelwar-chopchop-bftsmart.csv"]
-    # plotApps(appLabels, appFilesA, appFilesB, appFilesC)
+    # _plotApps(appLabels, appFilesA, appFilesB, appFilesC)
 
-    ### Merge most bar plots into one long line like the comma plot
+    ### OSDI submission: merge most bar plots into one long line like the comma plot
     plotMergeMostBars(
         payloadLabels, payloadFilesA, payloadFilesB, payloadFilesC, payloadFilesD,
         systemLabels, systemFilesA, systemFilesB, systemFilesC, systemFilesD,
@@ -1027,7 +1027,7 @@ if __name__ == "__main__":
     fileA = "linerate-bullshark-sig.csv"
     fileB = "linerate-chopchop-bftsmart.csv"
     # fileB = ["linerate-chopchop-hotstuff.csv"]
-    # plotLinerateRatio(labels, files)
+    # _plotLinerateRatio(labels, files)
     # _plotLinerateThroughputV1(labels, files)
     # _plotLinerateThroughputV2(labels, files)
     plotLinerateThroughput(labelA, labelB, fileA, fileB)

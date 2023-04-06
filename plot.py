@@ -535,7 +535,7 @@ def plotAppsAx(ax, labels, filesAuction, filesPayments, filesPixelwar):
 
         for app, files in [("Auction", filesAuction[i]),
                     ("Payment", filesPayments[i]),
-                    ("Pixelwar", filesPixelwar[i])]:
+                    ("Pixel war", filesPixelwar[i])]:
             csv = pd.read_csv(utils.DIR_STATS + "/" + files, index_col=0)
             data[label][app] = csv["op avg"].max()
             dataErr[label][app] = csv.loc[csv["op avg"] == data[label][app]]["op std"].values[0]
@@ -593,7 +593,7 @@ def _plotServerFaults(labels, filesNoFaults, filesFaults):
     ### Labels
     ax.set_xlabel("Number of faults")
     # ax.set_ylabel("Throughput [Mop/s]", loc="top")
-    ax.set_ylabel("Throughput\n[Mop/s]", loc="center")
+    ax.set_ylabel("Throughput\n[M op/s]", loc="center")
 
     ### Ticks
     ax.set_ylim(0*10**6, 55*10**6)
@@ -676,7 +676,7 @@ def plotMatchingTrustedResources(labelsAB, filesA, filesB, labelCD, filesC, file
     ### Labels
     # ax.set_xlabel("")
     # ax.set_ylabel("Throughput [Mop/s]", loc="top")
-    ax.set_ylabel("Throughput\n[Mop/s, log]", loc="center")
+    ax.set_ylabel("Throughput\n[op/s, log]", loc="center")
 
     ### Ticks
     ax.set_xticklabels(["64 s\n$\\infty$ m", "64 s\n128 m", "64 s\n128 m", "64 s\n  64 m"])

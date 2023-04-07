@@ -392,6 +392,32 @@ def plotMergeMostBars(
     utils.saveFig("merged-bars")
 
 
+def plotMergeDistillationPayloadSizes(
+        distillationLabelsA, distillationFilesNoFaults, distillationFilesFaults, distillationLabelsB, distillationFilesB,
+        payloadLabels, payloadFilesA, payloadFilesB, payloadFilesC, payloadFilesD,
+        ):
+
+    fig, ax = plt.subplots(1, 2, **utils.FIG_SIZE_ONE_COL_LINERATE, sharey=True, squeeze=True) # FIG_SIZE_ONE_COL_LINERATE
+    nbRows, nbCols = len(ax), len(ax)
+
+    utils.commonFigFormat(ax[0])
+    utils.commonFigFormat(ax[1])
+
+    ### Remove left border except on leftmost plot
+    ax[1].spines['left'].set_visible(False)
+
+    plotDistillationAx(ax[0], distillationLabelsA, distillationFilesNoFaults, distillationFilesFaults, distillationLabelsB, distillationFilesB)
+    plotPayloadSizesAx(ax[1], payloadLabels, payloadFilesA, payloadFilesB, payloadFilesC, payloadFilesD)
+
+    ### Labels
+    ax[0].set_ylabel("Throughput\n[op/s, log]") #, loc="top")
+
+    ### Same yscales across subplots + mirrors ticks
+    decorateBarPlotLog(ax[0])
+    ax[1].yaxis.set_ticks_position('none')
+
+    ax[0].legend(**utils.FORMAT_LEGEND, ncol=3, columnspacing=1, loc='center', bbox_to_anchor=(0.87, 1.2))
+    utils.saveFig("merged-distillation-payloed-sizes")
 
 
 def plotPayloadSizesAx(ax, labels, filesComma, filesPayloadA, filesPayloadB, filesPayloadC):
@@ -1017,6 +1043,12 @@ if __name__ == "__main__":
         systemLabels, systemFilesA, systemFilesB, systemFilesC, systemFilesD,
         distillationLabelsA, distillationFilesNoFaults, distillationFilesFaults, distillationLabelsB, distillationFilesB,
         appLabels, appFilesA, appFilesB, appFilesC
+        )
+
+    ### OSDI revision: pair distillation ratio + payload size
+    plotMergeDistillationPayloadSizes(
+        distillationLabelsA, distillationFilesNoFaults, distillationFilesFaults, distillationLabelsB, distillationFilesB,
+        payloadLabels, payloadFilesA, payloadFilesB, payloadFilesC, payloadFilesD,
         )
 
     ### Server crashes with f = {0, 1, t}

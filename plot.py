@@ -125,6 +125,16 @@ def plotCurvesInFiles(fileList, labelList, ax, xColumn, yColumn, yColumnError):
     #     plt.text(i, valueList[i], valueList[i], ha = 'center')
 
 
+def decorateBarPlotLog(ax):
+    ### Ticks
+    ax.set_yscale("log")
+    ax.set_ylim(10**5, 1.4*10**8)
+    ax.yaxis.set_major_locator(ticker.LogLocator(base=10, numticks=4))
+    ax.yaxis.set_minor_locator(ticker.LogLocator(base=10, numticks=10, subs=[x/10 for x in range(1,10)]))
+    ax.set_yticks([10**v for v in [5, 6, 7, 8]])
+    ax.set_yticklabels(["100k", "1M", "10M", "100M"])
+
+
 
 ##########
 ########## Chopchop figs
@@ -382,14 +392,6 @@ def plotMergeMostBars(
     utils.saveFig("merged-bars")
 
 
-def decorateBarPlotLog(ax):
-    ### Ticks
-    ax.set_yscale("log")
-    ax.set_ylim(10**5, 1.4*10**8)
-    ax.yaxis.set_major_locator(ticker.LogLocator(base=10, numticks=4))
-    ax.yaxis.set_minor_locator(ticker.LogLocator(base=10, numticks=10, subs=[x/10 for x in range(1,10)]))
-    ax.set_yticks([10**v for v in [5, 6, 7, 8]])
-    ax.set_yticklabels(["100k", "1M", "10M", "100M"])
 
 
 def plotPayloadSizesAx(ax, labels, filesComma, filesPayloadA, filesPayloadB, filesPayloadC):

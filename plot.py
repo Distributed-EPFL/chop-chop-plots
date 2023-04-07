@@ -950,15 +950,14 @@ if __name__ == "__main__":
     utils.init()
  
     ### Motivation plot showing the throughput of internet services (manual data) + chopchop
-    files = ["comma-chopchop-bftsmart.csv", "comma-chopchop-hotstuff.csv"]
     plotMotivation("comma-chopchop-bftsmart.csv", "comma-chopchop-hotstuff.csv")
 
     ### Comma plot single subplot
-    # labels = ["CC-BFT-SMaRt", "CC-HotStuff"]
-    # files = ["comma-chopchop-bftsmart.csv", "comma-chopchop-hotstuff.csv"]
-    # labels = ["CC-BFT-SMaRt", "CC-HotStuff", "NW-Bullshark", "NW-Bullshark-sig"]
-    # files = ["comma-chopchop-bftsmart.csv", "comma-chopchop-hotstuff.csv", "comma-bullshark.csv", "comma-bullshark-sig.csv"]
-    # _plotCommaSingle(labels, files)
+    # commaLabels = ["CC-BFT-SMaRt", "CC-HotStuff"]
+    # commaFiles = ["comma-chopchop-bftsmart.csv", "comma-chopchop-hotstuff.csv"]
+    # commaLabels = ["CC-BFT-SMaRt", "CC-HotStuff", "NW-Bullshark", "NW-Bullshark-sig"]
+    # commaFiles = ["comma-chopchop-bftsmart.csv", "comma-chopchop-hotstuff.csv", "comma-bullshark.csv", "comma-bullshark-sig.csv"]
+    # _plotCommaSingle(commaLabels, commaFiles)
 
     ### Comma plot split in several subplots
     commaLabelsA = ["HotStuff", "BFT-SMaRt"]
@@ -1015,21 +1014,21 @@ if __name__ == "__main__":
     plotServerFaults(labels, filesNoFaults, filesFaults)
 
     ### Matching trusted resources
-    labelsAB = ["CC-HotStuff", "CC-BFT-SMaRt"]
-    filesA = ["comma-chopchop-hotstuff.csv", "comma-chopchop-bftsmart.csv"]
-    filesB = ["matching-trusted-192-chopchop-hotstuff.csv", "matching-trusted-192-chopchop-bftsmart.csv"]
-    labelCD = "NW-Bullshark-sig"
-    fileC = "matching-trusted-192-bullshark-sig.csv"
-    fileD = "comma-bullshark-sig.csv"
-    plotMatchingTrustedResources(labelsAB, filesA, filesB, labelCD, fileC, fileD)
+    matchingLabelsAB = ["CC-HotStuff", "CC-BFT-SMaRt"]
+    matchingFilesA = ["comma-chopchop-hotstuff.csv", "comma-chopchop-bftsmart.csv"]
+    matchingFilesB = ["matching-trusted-192-chopchop-hotstuff.csv", "matching-trusted-192-chopchop-bftsmart.csv"]
+    matchingLabelCD = "NW-Bullshark-sig"
+    matchingFileC = "matching-trusted-192-bullshark-sig.csv"
+    matchingFileD = "comma-bullshark-sig.csv"
+    plotMatchingTrustedResources(matchingLabelsAB, matchingFilesA, matchingFilesB, matchingLabelCD, matchingFileC, matchingFileD)
 
     ### Linerate
-    labelA = "NW-Bullshark-sig"
-    labelB = "CC-BFT-SMaRt"
-    fileA = "linerate-bullshark-sig.csv"
-    fileB = "linerate-chopchop-bftsmart.csv"
+    linerateLabelA = "NW-Bullshark-sig"
+    linerateLabelB = "CC-BFT-SMaRt"
+    linerateFileA = "linerate-bullshark-sig.csv"
+    linerateFileB = "linerate-chopchop-bftsmart.csv"
     # fileB = ["linerate-chopchop-hotstuff.csv"]
-    # _plotLinerateRatio(labels, files)
-    # _plotLinerateThroughputV1(labels, files)
-    # _plotLinerateThroughputV2(labels, files)
-    plotLinerateThroughput(labelA, labelB, fileA, fileB)
+    # _plotLinerateRatio(linerateLabels, linerateFiles)
+    # _plotLinerateThroughputV1(linerateLabels, linerateFiles)
+    # _plotLinerateThroughputV2(linerateLabels, linerateFiles)
+    plotLinerateThroughput(linerateLabelA, linerateLabelB, linerateFileA, linerateFileB)

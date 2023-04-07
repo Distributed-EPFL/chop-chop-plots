@@ -583,7 +583,7 @@ def plotServerFaultsAx(ax, labels, filesNoFaults, filesFaults):
     ax = barplot(ax, data, dataErr)
 
 
-def _plotServerFaults(labels, filesNoFaults, filesFaults):
+def plotServerFaults(labels, filesNoFaults, filesFaults):
     fig, ax = plt.subplots(1, 1, **utils.FIG_SIZE_ONE_COL_SMALL)
     utils.commonFigFormat(ax)
 

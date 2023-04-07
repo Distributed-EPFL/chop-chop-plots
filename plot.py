@@ -446,6 +446,36 @@ def plotMergeSystemSizesAndMatchingResources(
     utils.saveFig("merged-system-sizes-matching-trusted-resources")
 
 
+def plotMergeServerFaultsAndApps(
+        faultsLabels, filesNoFaults, filesFaults,
+        appLabels, appFilesA, appFilesB, appFilesC
+        ):
+    fig, ax = plt.subplots(1, 2, **utils.FIG_SIZE_ONE_COL_LINERATE, sharey=True, squeeze=True) # FIG_SIZE_ONE_COL_LINERATE
+    nbRows, nbCols = len(ax), len(ax)
+
+    utils.commonFigFormat(ax[0])
+    utils.commonFigFormat(ax[1])
+
+    ### Remove left border except on leftmost plot
+    ax[1].spines['left'].set_visible(False)
+
+    plotServerFaultsAx(ax[0], faultsLabels, filesNoFaults, filesFaults)
+    plotAppsAx(ax[1], appLabels, appFilesA, appFilesB, appFilesC)
+
+    ### Labels
+    ax[0].set_ylabel("Throughput\n[op/s, log]") #, loc="top")
+
+    ### Same yscales across subplots + mirrors ticks
+    decorateBarPlotLog(ax[0])
+    ax[1].yaxis.set_ticks_position('none')
+
+    ### Smaller font size for the application ticks
+    ax[1].tick_params(axis='x', which='major', labelsize=utils.FONT_SIZE_XS)
+
+    ax[0].legend(**utils.FORMAT_LEGEND, ncol=3, columnspacing=1, loc='center', bbox_to_anchor=(0.87, 1.2))
+    utils.saveFig("merged-servers-faults-applications")
+
+
 def plotPayloadSizesAx(ax, labels, filesComma, filesPayloadA, filesPayloadB, filesPayloadC):
     ### Kind of manually reconstruct the data
     data = {}
@@ -647,7 +677,7 @@ def plotServerFaultsAx(ax, labels, filesNoFaults, filesFaults):
     ax = barplot(ax, data, dataErr)
 
 
-def plotServerFaults(labels, filesNoFaults, filesFaults):
+def _plotServerFaults(labels, filesNoFaults, filesFaults):
     fig, ax = plt.subplots(1, 1, **utils.FIG_SIZE_ONE_COL_SMALL)
     utils.commonFigFormat(ax)
 
@@ -1072,10 +1102,10 @@ if __name__ == "__main__":
     #     )
 
     ### Server crashes with f = {0, 1, t}
-    labels = ["CC-HotStuff", "CC-BFT-SMaRt"]
+    faultsLabels = ["CC-HotStuff", "CC-BFT-SMaRt"]
     filesNoFaults = ["comma-chopchop-hotstuff.csv", "comma-chopchop-bftsmart.csv"] # f=0
     filesFaults = ["faults-chopchop-hotstuff.csv", "faults-chopchop-bftsmart.csv"]
-    plotServerFaults(labels, filesNoFaults, filesFaults)
+    # _plotServerFaults(faultsLabels, filesNoFaults, filesFaults)
 
     ### Matching trusted resources
     matchingLabelsAB = ["CC-HotStuff", "CC-BFT-SMaRt"]
@@ -1107,4 +1137,10 @@ if __name__ == "__main__":
     plotMergeSystemSizesAndMatchingResources(
         systemLabels, systemFilesA, systemFilesB, systemFilesC, systemFilesD,
         matchingLabelsAB, matchingFilesA, matchingFilesB, matchingLabelCD, matchingFileC, matchingFileD,
+        )
+
+    ### OSDI revision: pair server faults + applications
+    plotMergeServerFaultsAndApps(
+        faultsLabels, filesNoFaults, filesFaults,
+        appLabels, appFilesA, appFilesB, appFilesC
         )

@@ -348,7 +348,7 @@ def plotCommaSplit(labelListA, labelListB, labelListC, labelListD, fileListA, fi
 def plotMergeMostBars(
         payloadLabels, payloadFilesA, payloadFilesB, payloadFilesC, payloadFilesD,
         systemLabels, systemFilesA, systemFilesB, systemFilesC, systemFilesD,
-        distillationLabels, distillationFilesNoFaults, distillationFilesFaults,
+        distillationLabelsA, distillationFilesNoFaults, distillationFilesFaults, distillationLabelsB, distillationFilesB,
         appLabels, appFilesA, appFilesB, appFilesC
         ):
 
@@ -367,7 +367,7 @@ def plotMergeMostBars(
 
     plotPayloadSizesAx(ax[0], payloadLabels, payloadFilesA, payloadFilesB, payloadFilesC, payloadFilesD)
     plotSystemSizesAx(ax[1], systemLabels, systemFilesA, systemFilesB, systemFilesC, systemFilesD)
-    plotDistillationAx(ax[2], distillationLabels, distillationFilesNoFaults, distillationFilesFaults)
+    plotDistillationAx(ax[2], distillationLabelsA, distillationFilesNoFaults, distillationFilesFaults, distillationLabelsB, distillationFilesB)
     plotAppsAx(ax[3], appLabels, appFilesA, appFilesB, appFilesC)
     # plotServerFaultsAx(ax[1], labels, filesNoFaults, filesFaults)
 
@@ -489,11 +489,11 @@ def _plotSystemSizes(labels, filesSystemA, filesSystemB, filesSystemC, filesComm
     utils.saveFig("system-sizes")
 
 
-def plotDistillationAx(ax, labels, filesNoFaults, filesFaults):
+def plotDistillationAx(ax, labelsA, filesNoFaults, filesFaults, labelB, fileB):
     ### Kind of manually reconstruct the data
     data = {}
     dataErr = {}
-    for i, label in enumerate(labels):
+    for i, label in enumerate(labelsA):
         data[label] = {}
         dataErr[label] = {}
 
@@ -509,15 +509,25 @@ def plotDistillationAx(ax, labels, filesNoFaults, filesFaults):
         data[label][p] = csv["op avg"].max()
         dataErr[label][p] = csv.loc[csv["op avg"] == data[label][p]]["op std"].values[0]
 
+    ### Bullshark
+    label = labelB
+    data[label] = {}
+    dataErr[label] = {}
+    csv = pd.read_csv(utils.DIR_STATS + "/" + fileB, index_col=0)
+
+    for p in ["0%", "100%"]:
+        data[label][p] = csv["op avg"].max()
+        dataErr[label][p] = 0
+
     # print(data)
     ax = barplot(ax, data, dataErr)
 
 
-def _plotDistillation(labels, filesNoFaults, filesFaults):
+def _plotDistillation(labelsA, filesNoFaults, filesFaults, distillationLabelsB, distillationFilesB):
     fig, ax = plt.subplots(1, 1, **utils.FIG_SIZE_ONE_COL_SMALL)
     utils.commonFigFormat(ax)
 
-    plotDistillationAx(ax, labels, filesNoFaults, filesFaults)
+    plotDistillationAx(ax, labelsA, filesNoFaults, filesFaults, distillationLabelsB, distillationFilesB)
     decorateBarPlotLog(ax)
 
     ax.set_xlabel("Distillation ratio")
@@ -987,9 +997,11 @@ if __name__ == "__main__":
     # _plotSystemSizes(systemLabels, systemFilesA, systemFilesB, systemFilesC, systemFilesD)
 
     ### Distillation = when client crash
-    distillationLabels = ["CC-HotStuff", "CC-BFT-SMaRt"]
+    distillationLabelsA = ["CC-HotStuff", "CC-BFT-SMaRt"]
     distillationFilesNoFaults = ["comma-chopchop-hotstuff.csv", "comma-chopchop-bftsmart.csv"] # 100% reduction
     distillationFilesFaults = ["reduction-00-chopchop-hotstuff.csv", "reduction-00-chopchop-bftsmart.csv"]
+    distillationLabelsB = "NW-Bullshark-sig" # bullshark for comparison
+    distillationFilesB = "comma-bullshark-sig.csv"
     # _plotDistillation(distillationLabels, distillationFilesNoFaults, distillationFilesFaults)
 
     ### Applications
@@ -1003,7 +1015,7 @@ if __name__ == "__main__":
     plotMergeMostBars(
         payloadLabels, payloadFilesA, payloadFilesB, payloadFilesC, payloadFilesD,
         systemLabels, systemFilesA, systemFilesB, systemFilesC, systemFilesD,
-        distillationLabels, distillationFilesNoFaults, distillationFilesFaults,
+        distillationLabelsA, distillationFilesNoFaults, distillationFilesFaults, distillationLabelsB, distillationFilesB,
         appLabels, appFilesA, appFilesB, appFilesC
         )
 

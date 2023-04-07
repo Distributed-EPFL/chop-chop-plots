@@ -1024,7 +1024,7 @@ def plotLinerateThroughput(labelA, labelB, fileA, fileB):
     ## Log scale
     # ax[0].set_yscale("log") # nope
 
-    ax[1].legend(**utils.FORMAT_LEGEND, ncol=3, loc='center', bbox_to_anchor=(-0.2, -0.55),
+    ax[1].legend(**utils.FORMAT_LEGEND, ncol=3, loc='center', bbox_to_anchor=(-0.2, 1.35),
         columnspacing=1)
         #borderaxespad=0.3, handletextpad=1.5, handletextpad=0.5, columnspacing=1
     utils.saveFig("linerate-throughput-log")

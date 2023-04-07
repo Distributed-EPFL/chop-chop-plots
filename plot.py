@@ -345,7 +345,7 @@ def plotCommaSplit(labelListA, labelListB, labelListC, labelListD, fileListA, fi
     utils.saveFig("comma-split")
 
 
-def plotMergeMostBars(
+def _plotMergeMostBars(
         payloadLabels, payloadFilesA, payloadFilesB, payloadFilesC, payloadFilesD,
         systemLabels, systemFilesA, systemFilesB, systemFilesC, systemFilesD,
         distillationLabelsA, distillationFilesNoFaults, distillationFilesFaults, distillationLabelsB, distillationFilesB,
@@ -392,11 +392,10 @@ def plotMergeMostBars(
     utils.saveFig("merged-bars")
 
 
-def plotMergeDistillationPayloadSizes(
+def plotMergeDistillationAndPayloadSizes(
         distillationLabelsA, distillationFilesNoFaults, distillationFilesFaults, distillationLabelsB, distillationFilesB,
         payloadLabels, payloadFilesA, payloadFilesB, payloadFilesC, payloadFilesD,
         ):
-
     fig, ax = plt.subplots(1, 2, **utils.FIG_SIZE_ONE_COL_LINERATE, sharey=True, squeeze=True) # FIG_SIZE_ONE_COL_LINERATE
     nbRows, nbCols = len(ax), len(ax)
 
@@ -418,6 +417,33 @@ def plotMergeDistillationPayloadSizes(
 
     ax[0].legend(**utils.FORMAT_LEGEND, ncol=3, columnspacing=1, loc='center', bbox_to_anchor=(0.87, 1.2))
     utils.saveFig("merged-distillation-payloed-sizes")
+
+
+def plotMergeSystemSizesAndMatchingResources(
+        systemLabels, systemFilesA, systemFilesB, systemFilesC, systemFilesD,
+        matchingLabelsAB, matchingFilesA, matchingFilesB, matchingLabelCD, matchingFileC, matchingFileD
+        ):
+    fig, ax = plt.subplots(1, 2, **utils.FIG_SIZE_ONE_COL_LINERATE, sharey=True, squeeze=True) # FIG_SIZE_ONE_COL_LINERATE
+    nbRows, nbCols = len(ax), len(ax)
+
+    utils.commonFigFormat(ax[0])
+    utils.commonFigFormat(ax[1])
+
+    ### Remove left border except on leftmost plot
+    ax[1].spines['left'].set_visible(False)
+
+    plotSystemSizesAx(ax[0], systemLabels, systemFilesA, systemFilesB, systemFilesC, systemFilesD)
+    plotMatchingTrustedResourcesAx(ax[1], matchingLabelsAB, matchingFilesA, matchingFilesB, matchingLabelCD, matchingFileC, matchingFileD)
+
+    ### Labels
+    ax[0].set_ylabel("Throughput\n[op/s, log]") #, loc="top")
+
+    ### Same yscales across subplots + mirrors ticks
+    decorateBarPlotLog(ax[0])
+    ax[1].yaxis.set_ticks_position('none')
+
+    ax[0].legend(**utils.FORMAT_LEGEND, ncol=3, columnspacing=1, loc='center', bbox_to_anchor=(0.87, 1.2))
+    utils.saveFig("merged-system-sizes-matching-trusted-resources")
 
 
 def plotPayloadSizesAx(ax, labels, filesComma, filesPayloadA, filesPayloadB, filesPayloadC):
@@ -652,7 +678,7 @@ def plotServerFaults(labels, filesNoFaults, filesFaults):
     utils.saveFig("server-faults")
 
 
-def plotMatchingTrustedResourcesAx(ax, labelsAB, filesA, filesB, labelCD, filesC, filesD):
+def plotMatchingTrustedResourcesAx(ax, labelsAB, filesA, filesB, labelCD, fileC, fileD):
     ### Kind of manually reconstruct the data
     data = {}
     dataErr = {}
@@ -703,21 +729,21 @@ def plotMatchingTrustedResourcesAx(ax, labelsAB, filesA, filesB, labelCD, filesC
     # print(data)
     ax = barplot(ax, data, dataErr)
 
+    ### Ticks
+    ax.set_xticklabels(["64 s\n$\\infty$ m", "64 s\n128 m", "64 s\n128 m", "64 s\n  64 m"])
 
-def plotMatchingTrustedResources(labelsAB, filesA, filesB, labelCD, filesC, filesD):
+
+def _plotMatchingTrustedResources(labelsAB, filesA, filesB, labelCD, fileC, fileD):
     fig, ax = plt.subplots(1, 1, **utils.FIG_SIZE_ONE_COL_SMALL)
     utils.commonFigFormat(ax)
 
-    plotMatchingTrustedResourcesAx(ax, labelsAB, filesA, filesB, labelCD, filesC, filesD)
+    plotMatchingTrustedResourcesAx(ax, labelsAB, filesA, filesB, labelCD, fileC, fileD)
     decorateBarPlotLog(ax)
 
     ### Labels
     # ax.set_xlabel("")
     # ax.set_ylabel("Throughput [Mop/s]", loc="top")
     ax.set_ylabel("Throughput\n[op/s, log]", loc="center")
-
-    ### Ticks
-    ax.set_xticklabels(["64 s\n$\\infty$ m", "64 s\n128 m", "64 s\n128 m", "64 s\n  64 m"])
 
     ax.legend(**utils.FORMAT_LEGEND, ncol=1, columnspacing=1, loc='center', bbox_to_anchor=(1.55, 0.5))
     utils.saveFig("matching-trusted-resources")
@@ -1038,18 +1064,12 @@ if __name__ == "__main__":
     # _plotApps(appLabels, appFilesA, appFilesB, appFilesC)
 
     ### OSDI submission: merge most bar plots into one long line like the comma plot
-    plotMergeMostBars(
-        payloadLabels, payloadFilesA, payloadFilesB, payloadFilesC, payloadFilesD,
-        systemLabels, systemFilesA, systemFilesB, systemFilesC, systemFilesD,
-        distillationLabelsA, distillationFilesNoFaults, distillationFilesFaults, distillationLabelsB, distillationFilesB,
-        appLabels, appFilesA, appFilesB, appFilesC
-        )
-
-    ### OSDI revision: pair distillation ratio + payload size
-    plotMergeDistillationPayloadSizes(
-        distillationLabelsA, distillationFilesNoFaults, distillationFilesFaults, distillationLabelsB, distillationFilesB,
-        payloadLabels, payloadFilesA, payloadFilesB, payloadFilesC, payloadFilesD,
-        )
+    # _plotMergeMostBars(
+    #     payloadLabels, payloadFilesA, payloadFilesB, payloadFilesC, payloadFilesD,
+    #     systemLabels, systemFilesA, systemFilesB, systemFilesC, systemFilesD,
+    #     distillationLabelsA, distillationFilesNoFaults, distillationFilesFaults, distillationLabelsB, distillationFilesB,
+    #     appLabels, appFilesA, appFilesB, appFilesC
+    #     )
 
     ### Server crashes with f = {0, 1, t}
     labels = ["CC-HotStuff", "CC-BFT-SMaRt"]
@@ -1064,7 +1084,7 @@ if __name__ == "__main__":
     matchingLabelCD = "NW-Bullshark-sig"
     matchingFileC = "matching-trusted-192-bullshark-sig.csv"
     matchingFileD = "comma-bullshark-sig.csv"
-    plotMatchingTrustedResources(matchingLabelsAB, matchingFilesA, matchingFilesB, matchingLabelCD, matchingFileC, matchingFileD)
+    # _plotMatchingTrustedResources(matchingLabelsAB, matchingFilesA, matchingFilesB, matchingLabelCD, matchingFileC, matchingFileD)
 
     ### Linerate
     linerateLabelA = "NW-Bullshark-sig"
@@ -1076,3 +1096,15 @@ if __name__ == "__main__":
     # _plotLinerateThroughputV1(linerateLabels, linerateFiles)
     # _plotLinerateThroughputV2(linerateLabels, linerateFiles)
     plotLinerateThroughput(linerateLabelA, linerateLabelB, linerateFileA, linerateFileB)
+
+    ### OSDI revision: pair distillation ratio + payload size
+    plotMergeDistillationAndPayloadSizes(
+        distillationLabelsA, distillationFilesNoFaults, distillationFilesFaults, distillationLabelsB, distillationFilesB,
+        payloadLabels, payloadFilesA, payloadFilesB, payloadFilesC, payloadFilesD
+        )
+
+    ### OSDI revision: pair system sizes + matching resources
+    plotMergeSystemSizesAndMatchingResources(
+        systemLabels, systemFilesA, systemFilesB, systemFilesC, systemFilesD,
+        matchingLabelsAB, matchingFilesA, matchingFilesB, matchingLabelCD, matchingFileC, matchingFileD,
+        )

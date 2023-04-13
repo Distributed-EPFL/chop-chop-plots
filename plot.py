@@ -719,48 +719,46 @@ def plotMatchingTrustedResourcesAx(ax, labelsAB, filesA, filesB, labelCD, fileC,
         dataErr[label] = {}
 
         ### First cluster of bars is chopchop comma data
-        p = "1"
+        p = 1
         csv = pd.read_csv(utils.DIR_STATS + "/" + filesA[i], index_col=0)
         data[label][p] = csv["op avg"].max()
         dataErr[label][p] = csv.loc[ csv["op avg"] == data[label][p] ]["op std"].values[0]
 
         ### Second cluster of bars is chopchop with only honest brokers (no load brokers)
-        p = "2"
+        p = 2
         csv = pd.read_csv(utils.DIR_STATS + "/" + filesB[i], index_col=0)
         data[label][p] = csv["op avg"].max()
         dataErr[label][p] = csv.loc[ csv["op avg"] == data[label][p] ]["op std"].values[0]
 
-        ### Fill third and fourth clusters with empty values for bullshark
-        for p in [3, 4]:
-            data[label][p] = 0
-            dataErr[label][p] = 0
+        ### Fill third cluster with empty values for bullshark
+        data[label][3] = 0
+        dataErr[label][3] = 0
 
     ### Bullshark
     label = labelCD
     data[label] = {}
     dataErr[label] = {}
 
-    ### Fill first and second clusters with empty values for bullshark
-    for p in [1, 2]:
-        data[label][p] = 0
+    ### Fill first cluster with empty values for bullshark
+    data[label][1] = 0
 
     ### No error bars on bullshark
-    for p in [1, 2, 3, 4]:
+    for p in [1, 2, 3]:
         dataErr[label][p] = 0
 
-    ### Third cluster of bars is bullshark with 2x workers
+    ### Second cluster of bars is bullshark with 2x workers
     csv = pd.read_csv(utils.DIR_STATS + "/" + fileC, index_col=0)
-    data[label]["3"] = csv["op avg"].max()
+    data[label][2] = csv["op avg"].max()
 
-    ### Fourth cluster of bars is bullshark comma data
+    ### Third cluster of bars is bullshark comma data
     csv = pd.read_csv(utils.DIR_STATS + "/" + fileD, index_col=0)
-    data[label]["4"] = csv["op avg"].max()
+    data[label][3] = csv["op avg"].max()
 
     # print(data)
     ax = barplot(ax, data, dataErr)
 
     ### Ticks
-    ax.set_xticklabels(["64 s\n$\\infty$ m", "64 s\n128 m", "64 s\n128 m", "64 s\n  64 m"])
+    ax.set_xticklabels(["64 s\n$\\infty$ m", "64 s\n128 m", "64 s\n  64 m"])
 
 
 def _plotMatchingTrustedResources(labelsAB, filesA, filesB, labelCD, fileC, fileD):

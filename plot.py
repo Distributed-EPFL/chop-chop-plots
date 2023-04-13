@@ -66,7 +66,7 @@ def barplot(ax, data, dataErr):
     bars = {}
     for i, approach in enumerate(data.keys()):
         bars[approach] = ax.bar(location(i), data[approach].values(), width,
-            yerr=dataErr[approach].values(), label=approach, fill=True, **BAR_FORMAT[approach])
+            yerr=dataErr[approach].values(), label=approach, fill=True, rasterized=True, **BAR_FORMAT[approach])
 
     ### Ticks, limits
     ax.set_xticks(xTicks)

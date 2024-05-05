@@ -981,7 +981,7 @@ def plotLinerateThroughput(labelA, labelB, fileA, fileB):
     ax[0].set_title(labelA) #, color=LINE_FORMAT[labelA]["color"])
     ax[1].set_title(labelB) #, color=LINE_FORMAT[labelB]["color"])
     ax[0].set_xlabel("Input rate [op/s]")
-    ax[0].set_ylabel("Output rate [MB/s]") #, loc="top")
+    ax[0].set_ylabel("Rate [MB/s]") #, loc="top")
 
     ### Ticks left plot
     ax[0].set_xlim(0, 82*10**4)

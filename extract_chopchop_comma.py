@@ -25,10 +25,12 @@ def latencies(log_path):
     
     return latencies
 
-def heartbeat_paths(broadcast, load_broker_throughput, base_path):
+def heartbeat_paths(broadcast, load_broker_throughput, base_path, matching_trusted=False):
     # Careful: include in the filter the batch size of the TOB.
     # We had one run that did not have a correct batch size and should be thrown away.
     load_broker_throughput_filter = "6-18-16_" + str(load_broker_throughput)
+    if matching_trusted:
+        load_broker_throughput_filter = str(load_broker_throughput)
 
     heartbeat_paths = []
 
@@ -141,6 +143,10 @@ def compute_latency(base_path, input_rates, destination, payload_size):
 
 
 
+#####
+##### Main
+#####
+
 ARGS = [
     (utils.RESULT_DIR + "/faults", [20000000, 44000000], 'faults', 8),
     (utils.RESULT_DIR + "/auction", [2000000], 'auction', 8),
@@ -158,3 +164,14 @@ ARGS = [
 for arg in ARGS:
     compute_latency(arg[0], arg[1], arg[2], arg[3])
     compute_throughput(arg[0], arg[1], arg[2], arg[3])
+
+
+#####
+##### Matching trusted
+#####
+
+throughputs = []
+for path in heartbeat_paths("bftsmart", "4600000", utils.DIR_RESULT + "/expe-osdi24", matching_trusted=True):
+    throughputs.append(output_throughput(path))
+
+print(throughputs)

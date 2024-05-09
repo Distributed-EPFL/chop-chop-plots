@@ -318,7 +318,7 @@ if __name__ == "__main__":
     parseBaselinesGeneric("comma", "workload", "hotstuff", utils.DIR_DATA + "/comma-64-hotstuff")
 
     ### Server faults plot
-    parseServerFaults("raw-data/faults-throughput.json", "raw-data/faults-latency.json")
+    parseServerFaults(utils.DIR_DATA + "/faults-throughput.json", utils.DIR_DATA + "/faults-latency.json")
 
     ### Applications plot
     for app in ["auction", "payment", "pixelwar"]:
@@ -338,7 +338,7 @@ if __name__ == "__main__":
     parseChopchopGeneric("reduction-00", utils.DIR_DATA + "/reduction-0-throughput.json", utils.DIR_DATA + "/reduction-0-latency.json")
 
     ### Linerate plot
-    parseLinerateChopchop("raw-data/linerate-chopchop.json")
+    parseLinerateChopchop(utils.DIR_DATA + "/linerate-chopchop.json")
     parseBaselinesGeneric("linerate", "workload", "bullshark-sig", utils.DIR_DATA + "/linerate-64-bullshark-sig", withByteRate=True)
 
     ### Matching trusted and untrusted CPU for bullshark

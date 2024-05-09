@@ -15,22 +15,11 @@ DIR_STATS = "stats"
 
 FORMAT_LEGEND = dict(framealpha=1, handletextpad=0.5, edgecolor="black")
 
-### NSDI 22
-# FIG_SIZE_ONE_COL_SMALL = dict(figsize=(4.8,0.7))
-### FC 23
-# FIG_SIZE_ONE_COL_FC    = dict(figsize=(4,1.5))
-### OSDI 23
 FIG_SIZE_ONE_COL        = dict(figsize=(5,1.5))
 FIG_SIZE_ONE_COL_LINERATE = dict(figsize=(6,1.65))
 FIG_SIZE_ONE_COL_MOTIV  = dict(figsize=(4,1.7))
 FIG_SIZE_ONE_COL_SMALL  = dict(figsize=(3,1.5))
-# FIG_SIZE_ONE_COL_BIG    = dict(figsize=(6,3)) # toy
-# FIG_SIZE_ONE_COL_SQUARE = dict(figsize=(5,5)) # toy
 FIG_SIZE_TWO_COL        = dict(figsize=(11,1.5))
-
-# FIG_SIZE_ONE_COL_SMALL = dict(figsize=(4,0.7))
-# FIG_SIZE_NO_YLABEL = dict(figsize=(2.0,2))
-
 
 FONT_SIZE_XS = 10
 FONT_SIZE_S  = 12

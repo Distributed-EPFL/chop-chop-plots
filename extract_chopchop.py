@@ -159,7 +159,7 @@ def linerate_paths(broadcast, load_broker_throughput, base_path):
     return linerate_paths
 
 
-def dump_to_json(plot, filename)
+def dump_to_json(plot, filename):
     contents = json.dumps(plot)
     with open(filename, 'a') as f:
         f.write(contents)
@@ -249,18 +249,18 @@ def compute_linerate(base_path, input_rates, destination, payload_size):
 #####
 
 ARGS = [
-    (RESULT_DIR + "/faults", [20000000, 44000000], 'faults', 8, False),
-    (RESULT_DIR + "/auction", [2000000], 'auction', 8, False),
-    (RESULT_DIR + "/payments", [32000000], 'payments', 8, False),
-    (RESULT_DIR + "/pixel_war", [35000000], 'pixel_war', 8, False),
-    (RESULT_DIR + "/payload-512", [900000], 'payload-512', 512, False),
-    (RESULT_DIR + "/payload-128", [4000000], 'payload-128', 128, False),
-    (RESULT_DIR + "/payload-32", [18000000], 'payload-32', 32, False),
-    (RESULT_DIR + "/reduction-0", [1000000], 'reduction-0', 8, False),
-    (RESULT_DIR + "/system-32", [48000000], 'system-32', 8, False),
-    (RESULT_DIR + "/system-16", [45000000], 'system-16', 8, False),
-    (RESULT_DIR + "/system-8", [40000000], 'system-8', 8, False),
-    (RESULT_DIR + "/matching_trusted", [4600000], 'matching-trusted', 8, True),
+    (DIR_RESULT + "/faults", [20000000, 44000000], 'faults', 8, False),
+    (DIR_RESULT + "/auction", [2000000], 'auction', 8, False),
+    (DIR_RESULT + "/payments", [32000000], 'payments', 8, False),
+    (DIR_RESULT + "/pixel_war", [35000000], 'pixel_war', 8, False),
+    (DIR_RESULT + "/payload-512", [900000], 'payload-512', 512, False),
+    (DIR_RESULT + "/payload-128", [4000000], 'payload-128', 128, False),
+    (DIR_RESULT + "/payload-32", [18000000], 'payload-32', 32, False),
+    (DIR_RESULT + "/reduction-0", [1000000], 'reduction-0', 8, False), # no distillation
+    (DIR_RESULT + "/system-32", [48000000], 'system-32', 8, False),
+    (DIR_RESULT + "/system-16", [45000000], 'system-16', 8, False),
+    (DIR_RESULT + "/system-8", [40000000], 'system-8', 8, False),
+    (DIR_RESULT + "/matching_trusted", [4600000], 'matching-trusted', 8, True),
 ]
 
 for arg in ARGS:

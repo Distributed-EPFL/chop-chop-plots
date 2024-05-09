@@ -25,7 +25,7 @@ def latencies(log_path):
     
     return latencies
 
-def heartbeat_paths(broadcast, load_broker_throughput, base_path, matching_trusted=False):
+def heartbeat_paths(broadcast, load_broker_throughput, base_path, matching_trusted):
     # Careful: include in the filter the batch size of the TOB.
     # We had one run that did not have a correct batch size and should be thrown away.
     load_broker_throughput_filter = "6-18-16_" + str(load_broker_throughput)
@@ -84,7 +84,7 @@ def client_log_paths(broadcast, load_broker_throughput, base_path):
     return heartbeat_paths
 
 ######## Throughputs ########
-def compute_throughput(base_path, input_rates, destination, payload_size):
+def compute_throughput(base_path, input_rates, destination, payload_size, matching_trusted):
     plot = {}
 
     for broadcast in ["bftsmart", "hotstuff"]:
@@ -96,7 +96,7 @@ def compute_throughput(base_path, input_rates, destination, payload_size):
 
             plot[broadcast][input_throughput] = []
 
-            for heartbeat_path in heartbeat_paths(broadcast, load_broker_throughput, base_path):
+            for heartbeat_path in heartbeat_paths(broadcast, load_broker_throughput, base_path, matching_trusted):
                 output_throughput_value = output_throughput(heartbeat_path) / payload_size * 8
                 plot[broadcast][input_throughput].append(output_throughput_value)
 
@@ -148,30 +148,20 @@ def compute_latency(base_path, input_rates, destination, payload_size):
 #####
 
 ARGS = [
-    (utils.RESULT_DIR + "/faults", [20000000, 44000000], 'faults', 8),
-    (utils.RESULT_DIR + "/auction", [2000000], 'auction', 8),
-    (utils.RESULT_DIR + "/payments", [32000000], 'payments', 8),
-    (utils.RESULT_DIR + "/pixel_war", [35000000], 'pixel_war', 8),
-    (utils.RESULT_DIR + "/payload-512", [900000], 'payload-512', 512),
-    (utils.RESULT_DIR + "/payload-128", [4000000], 'payload-128', 128),
-    (utils.RESULT_DIR + "/payload-32", [18000000], 'payload-32', 32),
-    (utils.RESULT_DIR + "/reduction-0", [1000000], 'reduction-0', 8),
-    (utils.RESULT_DIR + "/system-32", [48000000], 'system-32', 8),
-    (utils.RESULT_DIR + "/system-16", [45000000], 'system-16', 8),
-    (utils.RESULT_DIR + "/system-8", [40000000], 'system-8', 8),
+    (utils.RESULT_DIR + "/faults", [20000000, 44000000], 'faults', 8, False),
+    (utils.RESULT_DIR + "/auction", [2000000], 'auction', 8, False),
+    (utils.RESULT_DIR + "/payments", [32000000], 'payments', 8, False),
+    (utils.RESULT_DIR + "/pixel_war", [35000000], 'pixel_war', 8, False),
+    (utils.RESULT_DIR + "/payload-512", [900000], 'payload-512', 512, False),
+    (utils.RESULT_DIR + "/payload-128", [4000000], 'payload-128', 128, False),
+    (utils.RESULT_DIR + "/payload-32", [18000000], 'payload-32', 32, False),
+    (utils.RESULT_DIR + "/reduction-0", [1000000], 'reduction-0', 8, False),
+    (utils.RESULT_DIR + "/system-32", [48000000], 'system-32', 8, False),
+    (utils.RESULT_DIR + "/system-16", [45000000], 'system-16', 8, False),
+    (utils.RESULT_DIR + "/system-8", [40000000], 'system-8', 8, False),
+    (utils.RESULT_DIR + "/matching_trusted", [4600000], 'matching-trusted', 8, True),
 ]
 
 for arg in ARGS:
     compute_latency(arg[0], arg[1], arg[2], arg[3])
-    compute_throughput(arg[0], arg[1], arg[2], arg[3])
-
-
-#####
-##### Matching trusted
-#####
-
-throughputs = []
-for path in heartbeat_paths("bftsmart", "4600000", utils.DIR_RESULT + "/expe-osdi24", matching_trusted=True):
-    throughputs.append(output_throughput(path))
-
-print(throughputs)
+    compute_throughput(arg[0], arg[1], arg[2], arg[3], arg[4])

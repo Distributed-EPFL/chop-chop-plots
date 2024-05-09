@@ -249,6 +249,8 @@ def compute_linerate(base_path, input_rates, destination, payload_size):
 #####
 
 ARGS = [
+    # Missing the smallest data point of the comma
+    (DIR_RESULT + "/comma", [10000000, 20000000, 30000000, 40000000, 45000000, 46000000, 47000000, 48000000], 'comma-chopchop', 8, False),
     (DIR_RESULT + "/faults", [20000000, 44000000], 'faults', 8, False),
     (DIR_RESULT + "/auction", [2000000], 'auction', 8, False),
     (DIR_RESULT + "/payments", [32000000], 'payments', 8, False),
@@ -256,7 +258,8 @@ ARGS = [
     (DIR_RESULT + "/payload-512", [900000], 'payload-512', 512, False),
     (DIR_RESULT + "/payload-128", [4000000], 'payload-128', 128, False),
     (DIR_RESULT + "/payload-32", [18000000], 'payload-32', 32, False),
-    (DIR_RESULT + "/reduction-0", [1000000], 'reduction-0', 8, False), # no distillation
+    # reduction-0 = no distillation
+    (DIR_RESULT + "/reduction-0", [1000000], 'reduction-0', 8, False),
     (DIR_RESULT + "/system-32", [48000000], 'system-32', 8, False),
     (DIR_RESULT + "/system-16", [45000000], 'system-16', 8, False),
     (DIR_RESULT + "/system-8", [40000000], 'system-8', 8, False),

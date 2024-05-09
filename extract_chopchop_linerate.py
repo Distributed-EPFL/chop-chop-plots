@@ -41,9 +41,7 @@ def network_transfer(before_path, after_path):
 
     return after - before
 
-def linerate_paths(broadcast, load_broker_throughput):
-    base_path = utils.DIR_RESULT + "/linerate"
-
+def linerate_paths(broadcast, load_broker_throughput, base_path):
     load_broker_throughput_filter = "64-64-6-18-16_" + str(load_broker_throughput)
     secondary_filter = "8_400_2022"
 
@@ -80,29 +78,48 @@ def linerate_paths(broadcast, load_broker_throughput):
     return linerate_paths
 
 ######## Linerate ########
+def compute_linerate(base_path, input_rates, destination, payload_size):
+    plot = {}
 
-plot = {}
+    for broadcast in ["bftsmart", "hotstuff"]:
+        plot[broadcast] = {}
 
-for broadcast in ["bftsmart", "hotstuff"]:
-    plot[broadcast] = {}
-    
-    for load_broker_throughput in [10000000, 20000000, 30000000, 40000000, 50000000, 60000000]:
-        input_throughput = load_broker_throughput + 432000
-        input_throughput = float(input_throughput) / 1000000.
+        for load_broker_throughput in input_rates:
+            input_throughput = load_broker_throughput + 432000  / payload_size * 8.
+            input_throughput = float(input_throughput) / 1000000.
 
-        plot[broadcast][input_throughput] = []
+            plot[broadcast][input_throughput] = []
 
-        for linerate_path in linerate_paths(broadcast, load_broker_throughput):
-            output_throughput_value = output_throughput(linerate_path["heartbeat"])
-            output_total_messages = total_messages(linerate_path["heartbeat"])
-            network_transfer_value = network_transfer(linerate_path["before"], linerate_path["after"])
+            for linerate_path in linerate_paths(broadcast, load_broker_throughput, base_path):
+                output_throughput_value = output_throughput(linerate_path["heartbeat"])
+                output_total_messages = total_messages(linerate_path["heartbeat"])
+                network_transfer_value = network_transfer(linerate_path["before"], linerate_path["after"])
 
-            goodput = float(output_total_messages) * 11.5 / float(network_transfer_value)
+                goodput = float(output_total_messages) * 11.5 / float(network_transfer_value)
 
-            plot[broadcast][input_throughput].append({"output_throughput": output_throughput_value, "goodput": goodput})
+                plot[broadcast][input_throughput].append({"output_throughput": output_throughput_value, "goodput": goodput})
 
-            # print(broadcast + " @ " + str(input_throughput) + " -> " + str(output_throughput_value) + "  (" + str(goodput) + ")")
+                # print(broadcast + " @ " + str(input_throughput) + " -> " + str(output_throughput_value) + "  (" + str(goodput) + ")")
+
+    contents = json.dumps(plot)
+    filename = 'linerate_' + destination + '.json'
+    with open(filename, 'a') as f:
+        f.write(contents)
+    print("Created json file: " + filename)
+    # print("\n\n\n")
+    # print(contents)
 
 
-print("\n\n\n")
-print(json.dumps(plot))
+
+
+
+#####
+##### Main
+#####
+
+ARGS = [
+    (utils.DIR_RESULT + "/linerate", [10000000, 20000000, 30000000, 40000000, 50000000, 60000000], "chopchop", 8)
+    ]
+
+for arg in ARGS:
+    compute_linerate(args[0], args[1], args[2], args[3])

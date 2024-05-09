@@ -28,11 +28,12 @@ bftsmartConfig["subPattern"] = r'[0-9]+ -> [0-9]+ = ([0-9]+)$'
 def extract(dirName, config):
     if not os.path.isdir(dirName):
         print("Not a directory: " + dirName)
+        return
     dirPath = os.path.relpath(dirName).rstrip('/') # remove righ-most slashes
 
     clientFiles = glob.glob("{}/*_client_*.{}".format(dirPath, config["suffix"]))
     if len(clientFiles) != 80:
-        print("Warning: expected 80 files (16 honest clients+ 64 load clients) but counted {} files instead.".format(len(clientFiles)))
+        print("Warning: expected 80 files (16 honest clients + 64 load clients) but counted {} files instead.".format(len(clientFiles)))
 
     ### Parse input client files
     latencies = []
@@ -70,9 +71,12 @@ def extract(dirName, config):
 #####
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Expected one argument: directory containing all .{err,out} files for one run")
+    if len(sys.argv) < 3 or (sys.argv[1] != "bftsmart" and sys.argv[1] != "hotstuff"):
+        print("Expected two arguments: <bftsmart|hotstuff> <directory containing all .{err,out} files for one run>")
         sys.exit(1)
 
-    extract(sys.argv[1], bftsmartConfig) # BFT-SMaRt logs
-#    extract(sys.argv[1], hotstuffConfig) # HotStuff logs
+    cfg = bftsmartConfig
+    if sys.argv[1] == "hotstuff":
+        cfg = hotstuffConfig
+
+    extract(sys.argv[2], cfg)

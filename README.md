@@ -30,9 +30,9 @@ For comparison, the archive `sorted-results-little-boy.tar.xz` (435 MB decompres
 
 The script `extract_chopchop.py` aggregates the data from Chop Chop logs into `.json`. Please fill the variables at the top of the script to indicate: (1) the directory containing the compiled code of Chop Chop in order to access the `heartbeat_statistics` binary, (2) the directory containing the raw evaluation data, and (3) the name of the ethernet interface of the servers used to determine the total throughput of a run.
 
-Inputs: directories containing raw evaluation files (`.bin` heartbeat files) as indicated in the variable `DIR_RESULT` at the top and in the main loop at the bottom of the script.
+**Inputs**: directories containing raw evaluation files (`.bin` heartbeat files) as indicated in the variable `DIR_RESULT` at the top and in the main loop at the bottom of the script.
 
-Outputs: one `.json` file per latency and per throughput per system configuration, and one `.json` file for line rate measurements.
+**Outputs**: one `.json` file per latency and per throughput per system configuration, and one `.json` file for line rate measurements.
 
 ```
 python3 extract_chopchop.py
@@ -43,12 +43,12 @@ python3 extract_chopchop.py
 
 The script `extract_bftsmart_hotstuff.py` must be run once per evaluation run. For instance, it must be run 5 times per system configuration to obtain the data used in the paper, while the script `extract_chopchop.py` must only be run once regardless of the number of runs.
 
-Inputs:
+**Inputs**:
 
 1. `bftsmart` or `hotstuff` depending on the system configuration to parse;
 2. A directory `DIR` that contains 80 `.out` and 80 `.err` files of a single run (16 honest clients + 64 load clients).
 
-Outputs: `DIR.json` located in the same directory as `DIR`.
+**Outputs**: `DIR.json` located in the same directory as `DIR`.
 
 ```
 python3 extract_bftsmart_hotstuff.py bftsmart <DIR>
@@ -60,9 +60,9 @@ python3 extract_bftsmart_hotstuff.py hotstuff <DIR>
 
 The script `extract_bullshark.py` must be run once per evaluation run as with `bftsmart_hotstuff.py`. The script is mostly copied from the original Bullshark's `easy_log.py`. The main changes are around lines 375 to generate a `.json` containing the latency distribution and to include the logs of the worker nodes.
 
-Inputs: a directory `DIR` that contains the `.out` and `.err` files of a single run, as with `bftsmart_hotstuff.py`.
+**Inputs**: a directory `DIR` that contains the `.out` and `.err` files of a single run, as with `bftsmart_hotstuff.py`.
 
-Outputs: `DIR.easier-log.json` located in the same directory as `DIR`.
+**Outputs**: `DIR.easier-log.json` located in the same directory as `DIR`.
 
 ```
 python3 extract_bullshark.py <DIR>
@@ -73,9 +73,9 @@ python3 extract_bullshark.py <DIR>
 
 The script `stats.py` computes statistics on all the aggregated `.json` from all the runs of all the system configurations.
 
-Inputs: aggregated `.json` files in `agg-data/`, the exact location of each file can be found at the bottom of the script.
+**Inputs**: aggregated `.json` files in `agg-data/`, the exact location of each file can be found at the bottom of the script.
 
-Outputs: one statistics `.csv` file per system configuration stored in `stats/`. The `stats/` directory is already populated with the files used in the paper.
+**Outputs**: one statistics `.csv` file per system configuration stored in `stats/`. The `stats/` directory is already populated with the files used in the paper.
 
 ```
 python3 stats.py
@@ -87,9 +87,13 @@ python3 stats.py
 The script `plot.py` generates plots from the previously computed statistics.
 with helper functions and variables in `utils.py`.
 
-Inputs: statistical data in `stats/`, the exact location of each `.csv` file can be found at the bottom of the script.
+**Inputs**: statistical data in `stats/`, the exact location of each `.csv` file can be found at the bottom of the script.
 
-Outputs: plots in `.pdf` format stored in `figs/`, the exact location of each pdf can be found at the end of each function. Functions that start with an underscore (e.g. `_plotCommaSingle`) contain older code that generates figures that are not in the paper. See `utils.py` to generate `.eps` in addition to `.pdf`.
+**Outputs**: plots in `.pdf` format stored in `figs/`, the exact location of each pdf can be found at the end of each function. Functions that start with an underscore (e.g. `_plotCommaSingle`) contain older code that generates figures that are not in the paper. See `utils.py` to generate `.eps` in addition to `.pdf`.
+
+```
+python3 plot.py
+```
 
 Directory `figs/` is already populated with the figures used in the paper:
 

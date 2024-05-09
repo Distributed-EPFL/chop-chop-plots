@@ -4,8 +4,11 @@ import subprocess
 import os
 import json
 
+### local import
+import utils
+
 def output_throughput(heartbeat_path):
-    stdout = subprocess.run(["/home/ubuntu/chop-chop/target/release/heartbeat_statistics", "--shallow-server", heartbeat_path, "--start", "30", "--duration", "60"], stdout = subprocess.PIPE, stderr = subprocess.DEVNULL).stdout
+    stdout = subprocess.run([utils.DIR_CHOPCHOP + "/target/release/heartbeat_statistics", "--shallow-server", heartbeat_path, "--start", "30", "--duration", "60"], stdout = subprocess.PIPE, stderr = subprocess.DEVNULL).stdout
     stdout = str(stdout)
     stdout = stdout.split("\n")
     
@@ -21,7 +24,6 @@ def latencies(log_path):
     latencies = [int(line.split("Took")[1].split("ms")[0]) for line in deliveries]
     
     return latencies
-
 
 def heartbeat_paths(broadcast, load_broker_throughput, base_path):
     # Careful: include in the filter the batch size of the TOB.
@@ -96,14 +98,15 @@ def compute_throughput(base_path, input_rates, destination, payload_size):
                 output_throughput_value = output_throughput(heartbeat_path) / payload_size * 8
                 plot[broadcast][input_throughput].append(output_throughput_value)
 
-                print(broadcast + " @ " + str(input_throughput) + " -> " + str(output_throughput_value))
+                # print(broadcast + " @ " + str(input_throughput) + " -> " + str(output_throughput_value))
 
     contents = json.dumps(plot)
-    with open('throughput_' + destination + '.json', 'a') as f:
+    filename = 'throughput_' + destination + '.json'
+    with open(filename, 'a') as f:
         f.write(contents)
-
-    print("\n\n\n")
-    print(contents)
+    print("Created json file: " + filename)
+    # print("\n\n\n")
+    # print(contents)
 
 ####### Latencies ########
 def compute_latency(base_path, input_rates, destination, payload_size):
@@ -124,29 +127,34 @@ def compute_latency(base_path, input_rates, destination, payload_size):
                 for latency in latencies_values:
                     plot[broadcast][input_throughput].append(latency)
 
-                print(broadcast + " @ " + str(input_throughput) + " -> " + str(latencies_values))
+                # print(broadcast + " @ " + str(input_throughput) + " -> " + str(latencies_values))
 
     contents = json.dumps(plot)
-    with open('latency_' + destination + '.json', 'a') as f:
+    filename = 'latency_' + destination + '.json'
+    with open(filename, 'a') as f:
         f.write(contents)
+    print("Created json file: " + filename)
+    # print("\n\n\n")
+    # print(contents)
 
-    print("\n\n\n")
-    print(contents)
 
-args = [
-    # ("/home/ubuntu/result/faults", [20000000, 44000000], 'faults'),
-    # ("/home/ubuntu/result/auction", [2000000], 'auction'),
-    # ("/home/ubuntu/result/payments", [32000000], 'payments'),
-    # ("/home/ubuntu/result/pixel_war", [35000000], 'pixel_war'),
-    # ("/home/ubuntu/result/payload-512", [900000], 'payload-512', 512),
-    # ("/home/ubuntu/result/payload-128", [4000000], 'payload-128', 128),
-    # ("/home/ubuntu/result/payload-32", [18000000], 'payload-32', 32),
-    # ("/home/ubuntu/result/reduction-0", [1000000], 'reduction-0', 8),
-    # ("/home/ubuntu/result/system-32", [48000000], 'system-32', 8),
-    # ("/home/ubuntu/result/system-16", [45000000], 'system-16', 8),
-    ("/home/ubuntu/result/system-8", [40000000], 'system-8', 8),
+
+
+
+ARGS = [
+    (utils.RESULT_DIR + "/faults", [20000000, 44000000], 'faults', 8),
+    (utils.RESULT_DIR + "/auction", [2000000], 'auction', 8),
+    (utils.RESULT_DIR + "/payments", [32000000], 'payments', 8),
+    (utils.RESULT_DIR + "/pixel_war", [35000000], 'pixel_war', 8),
+    (utils.RESULT_DIR + "/payload-512", [900000], 'payload-512', 512),
+    (utils.RESULT_DIR + "/payload-128", [4000000], 'payload-128', 128),
+    (utils.RESULT_DIR + "/payload-32", [18000000], 'payload-32', 32),
+    (utils.RESULT_DIR + "/reduction-0", [1000000], 'reduction-0', 8),
+    (utils.RESULT_DIR + "/system-32", [48000000], 'system-32', 8),
+    (utils.RESULT_DIR + "/system-16", [45000000], 'system-16', 8),
+    (utils.RESULT_DIR + "/system-8", [40000000], 'system-8', 8),
 ]
 
-for arg in args:
+for arg in ARGS:
     compute_latency(arg[0], arg[1], arg[2], arg[3])
     compute_throughput(arg[0], arg[1], arg[2], arg[3])

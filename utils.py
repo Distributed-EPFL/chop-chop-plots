@@ -9,6 +9,9 @@ import sys
 ##### Global vars
 #####
 
+DIR_CHOPCHOP = "/home/ubuntu/chop-chop"
+DIR_RESULT = "/home/ubuntu/result"
+
 DIR_FIG = "figs"
 DIR_DATA = "agg-data"
 DIR_STATS = "stats"

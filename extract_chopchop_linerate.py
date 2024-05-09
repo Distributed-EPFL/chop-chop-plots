@@ -4,8 +4,11 @@ import subprocess
 import os
 import json
 
+### local import
+import utils
+
 def output_throughput(heartbeat_path):
-    stdout = subprocess.run(["/home/ubuntu/chop-chop/target/release/heartbeat_statistics", "--shallow-server", heartbeat_path, "--start", "30", "--duration", "60"], stdout = subprocess.PIPE, stderr = subprocess.DEVNULL).stdout
+    stdout = subprocess.run([utils.DIR_CHOPCHOP + "/target/release/heartbeat_statistics", "--shallow-server", heartbeat_path, "--start", "30", "--duration", "60"], stdout = subprocess.PIPE, stderr = subprocess.DEVNULL).stdout
     stdout = str(stdout)
     stdout = stdout.split("\n")
     
@@ -16,7 +19,7 @@ def output_throughput(heartbeat_path):
     raise "Malformed heartbeat output!"
 
 def total_messages(heartbeat_path):
-    stdout = subprocess.run(["/home/ubuntu/chop-chop/target/release/heartbeat_statistics", "--shallow-server", heartbeat_path], stdout = subprocess.PIPE, stderr = subprocess.DEVNULL).stdout
+    stdout = subprocess.run([utils.DIR_CHOPCHOP + "/target/release/heartbeat_statistics", "--shallow-server", heartbeat_path], stdout = subprocess.PIPE, stderr = subprocess.DEVNULL).stdout
     stdout = str(stdout)
     stdout = stdout.split("\n")
     
@@ -39,7 +42,7 @@ def network_transfer(before_path, after_path):
     return after - before
 
 def linerate_paths(broadcast, load_broker_throughput):
-    base_path = "/home/ubuntu/result/linerate"
+    base_path = utils.DIR_RESULT + "/linerate"
 
     load_broker_throughput_filter = "64-64-6-18-16_" + str(load_broker_throughput)
     secondary_filter = "8_400_2022"
@@ -98,7 +101,7 @@ for broadcast in ["bftsmart", "hotstuff"]:
 
             plot[broadcast][input_throughput].append({"output_throughput": output_throughput_value, "goodput": goodput})
 
-            print(broadcast + " @ " + str(input_throughput) + " -> " + str(output_throughput_value) + "  (" + str(goodput) + ")")
+            # print(broadcast + " @ " + str(input_throughput) + " -> " + str(output_throughput_value) + "  (" + str(goodput) + ")")
 
 
 print("\n\n\n")

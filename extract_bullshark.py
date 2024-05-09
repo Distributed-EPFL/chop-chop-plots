@@ -463,10 +463,11 @@ class LogParser:
 
         return cls(clients, primaries, workers, faults=faults)
 
-# Now you just need to give it the name a
-# Example Usage: python3 easier_log.py comma-64-baselines/bullshark_64-500000_64-200000_16-1_88_1_2022-12-09-17-40-10_3_eu-west-2/
 
-''' Print a summary of the logs '''
+'''
+Print a summary of the logs
+Example Usage: python3 extract_bullshark.py comma-64-baselines/bullshark_64-500000_64-200000_16-1_88_1_2022-12-09-17-40-10_3_eu-west-2/
+'''
 try:
     n = len(sys.argv)
     if n < 2:

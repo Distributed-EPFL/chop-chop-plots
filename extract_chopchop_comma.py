@@ -4,13 +4,19 @@ import subprocess
 import os
 import json
 
-### local import
-import utils
+
+#####
+##### Change at will
+#####
+
+HW_INTERFACE = "ens5"
+DIR_CHOPCHOP = "/home/ubuntu/chop-chop"
+DIR_RESULT = "/home/ubuntu/result"
 
 
 def output_throughput(heartbeat_path):
     """ Find throughput value in a file """
-    stdout = subprocess.run([utils.DIR_CHOPCHOP + "/target/release/heartbeat_statistics", "--shallow-server", heartbeat_path, "--start", "30", "--duration", "60"], stdout = subprocess.PIPE, stderr = subprocess.DEVNULL).stdout
+    stdout = subprocess.run([DIR_CHOPCHOP + "/target/release/heartbeat_statistics", "--shallow-server", heartbeat_path, "--start", "30", "--duration", "60"], stdout = subprocess.PIPE, stderr = subprocess.DEVNULL).stdout
     stdout = str(stdout)
     stdout = stdout.split("\n")
     
@@ -23,7 +29,7 @@ def output_throughput(heartbeat_path):
 
 def total_messages(heartbeat_path):
     """ Find number of messages delivered in a file """
-    stdout = subprocess.run([utils.DIR_CHOPCHOP + "/target/release/heartbeat_statistics", "--shallow-server", heartbeat_path], stdout = subprocess.PIPE, stderr = subprocess.DEVNULL).stdout
+    stdout = subprocess.run([DIR_CHOPCHOP + "/target/release/heartbeat_statistics", "--shallow-server", heartbeat_path], stdout = subprocess.PIPE, stderr = subprocess.DEVNULL).stdout
     stdout = str(stdout)
     stdout = stdout.split("\n")
 
@@ -47,8 +53,8 @@ def network_transfer(before_path, after_path):
     before_lines = open(before_path).readlines()
     after_lines = open(after_path).readlines()
 
-    befores = [line for line in before_lines if "ens5:rx_bytes:" in line]
-    afters = [line for line in after_lines if "ens5:rx_bytes:" in line]
+    befores = [line for line in before_lines if HW_INTERFACE + ":rx_bytes:" in line]
+    afters = [line for line in after_lines if HW_INTERFACE + ":rx_bytes:" in line]
 
     before = int(befores[0].split(":")[2])
     after = int(afters[0].split(":")[2])
@@ -153,6 +159,15 @@ def linerate_paths(broadcast, load_broker_throughput, base_path):
     return linerate_paths
 
 
+def dump_to_json(plot, filename)
+    contents = json.dumps(plot)
+    with open(filename, 'a') as f:
+        f.write(contents)
+    print("Created json file: " + filename)
+    # print("\n\n\n")
+    # print(contents)
+
+
 ######## Throughputs ########
 def compute_throughput(base_path, input_rates, destination, payload_size, matching_trusted):
     plot = {}
@@ -172,13 +187,7 @@ def compute_throughput(base_path, input_rates, destination, payload_size, matchi
 
                 # print(broadcast + " @ " + str(input_throughput) + " -> " + str(output_throughput_value))
 
-    contents = json.dumps(plot)
-    filename = 'throughput_' + destination + '.json'
-    with open(filename, 'a') as f:
-        f.write(contents)
-    print("Created json file: " + filename)
-    # print("\n\n\n")
-    # print(contents)
+    dump_to_json(plot, 'throughput_' + destination + '.json')
 
 
 ####### Latencies ########
@@ -202,13 +211,7 @@ def compute_latency(base_path, input_rates, destination, payload_size):
 
                 # print(broadcast + " @ " + str(input_throughput) + " -> " + str(latencies_values))
 
-    contents = json.dumps(plot)
-    filename = 'latency_' + destination + '.json'
-    with open(filename, 'a') as f:
-        f.write(contents)
-    print("Created json file: " + filename)
-    # print("\n\n\n")
-    # print(contents)
+    dump_to_json(plot, 'latency_' + destination + '.json')
 
 
 ######## Linerate ########
@@ -235,34 +238,29 @@ def compute_linerate(base_path, input_rates, destination, payload_size):
 
                 # print(broadcast + " @ " + str(input_throughput) + " -> " + str(output_throughput_value) + "  (" + str(goodput) + ")")
 
-    contents = json.dumps(plot)
-    filename = 'linerate_' + destination + '.json'
-    with open(filename, 'a') as f:
-        f.write(contents)
-    print("Created json file: " + filename)
-    # print("\n\n\n")
-    # print(contents)
+    dump_to_json(plot, 'linerate_' + destination + '.json')
+
 
 
 
 
 #####
-##### Throughput latency measures
+##### Throughput latency
 #####
 
 ARGS = [
-    (utils.RESULT_DIR + "/faults", [20000000, 44000000], 'faults', 8, False),
-    (utils.RESULT_DIR + "/auction", [2000000], 'auction', 8, False),
-    (utils.RESULT_DIR + "/payments", [32000000], 'payments', 8, False),
-    (utils.RESULT_DIR + "/pixel_war", [35000000], 'pixel_war', 8, False),
-    (utils.RESULT_DIR + "/payload-512", [900000], 'payload-512', 512, False),
-    (utils.RESULT_DIR + "/payload-128", [4000000], 'payload-128', 128, False),
-    (utils.RESULT_DIR + "/payload-32", [18000000], 'payload-32', 32, False),
-    (utils.RESULT_DIR + "/reduction-0", [1000000], 'reduction-0', 8, False),
-    (utils.RESULT_DIR + "/system-32", [48000000], 'system-32', 8, False),
-    (utils.RESULT_DIR + "/system-16", [45000000], 'system-16', 8, False),
-    (utils.RESULT_DIR + "/system-8", [40000000], 'system-8', 8, False),
-    (utils.RESULT_DIR + "/matching_trusted", [4600000], 'matching-trusted', 8, True),
+    (RESULT_DIR + "/faults", [20000000, 44000000], 'faults', 8, False),
+    (RESULT_DIR + "/auction", [2000000], 'auction', 8, False),
+    (RESULT_DIR + "/payments", [32000000], 'payments', 8, False),
+    (RESULT_DIR + "/pixel_war", [35000000], 'pixel_war', 8, False),
+    (RESULT_DIR + "/payload-512", [900000], 'payload-512', 512, False),
+    (RESULT_DIR + "/payload-128", [4000000], 'payload-128', 128, False),
+    (RESULT_DIR + "/payload-32", [18000000], 'payload-32', 32, False),
+    (RESULT_DIR + "/reduction-0", [1000000], 'reduction-0', 8, False),
+    (RESULT_DIR + "/system-32", [48000000], 'system-32', 8, False),
+    (RESULT_DIR + "/system-16", [45000000], 'system-16', 8, False),
+    (RESULT_DIR + "/system-8", [40000000], 'system-8', 8, False),
+    (RESULT_DIR + "/matching_trusted", [4600000], 'matching-trusted', 8, True),
 ]
 
 for arg in ARGS:
@@ -273,9 +271,6 @@ for arg in ARGS:
 ##### Linerate
 #####
 
-ARGS = [
-    (utils.DIR_RESULT + "/linerate", [10000000, 20000000, 30000000, 40000000, 50000000, 60000000], "chopchop", 8)
-    ]
-
+ARGS = [(DIR_RESULT + "/linerate", [10000000, 20000000, 30000000, 40000000, 50000000, 60000000], "chopchop", 8)]
 for arg in ARGS:
     compute_linerate(args[0], args[1], args[2], args[3])

@@ -25,13 +25,21 @@ bftsmartConfig["subPattern"] = r'[0-9]+ -> [0-9]+ = ([0-9]+)$'
 # ex: 1670590989146 -> 1670590989823 = 677
 
 
-def extract(dirName, config):
-    if not os.path.isdir(dirName):
-        print("Not a directory: " + dirName)
-        return
-    dirPath = os.path.relpath(dirName).rstrip('/') # remove righ-most slashes
+def extract(config, dirNames):
+    ### Find all directory paths
+    dirPaths = []
+    for dirName in dirNames:
+        if not os.path.isdir(dirName):
+            print("Not a directory: " + dirName)
+            return
+        path = os.path.relpath(dirName).rstrip('/') # remove righ-most slashes
+        dirPaths.append(path)
 
-    clientFiles = glob.glob("{}/*_client_*.{}".format(dirPath, config["suffix"]))
+    ### Recursively find all client files to parse
+    clientFiles = []
+    for dirPath in dirPaths:
+        files = glob.glob("{}/*_client_*.{}".format(dirPath, config["suffix"]), recursive=True)
+        clientFiles = clientFiles + files
     if len(clientFiles) != 80:
         print("Warning: expected 80 files (16 honest clients + 64 load clients) but counted {} files instead.".format(len(clientFiles)))
 
@@ -57,7 +65,7 @@ def extract(dirName, config):
     data['throughput-avg'] = throughputAvg
     data['latency-avg'] = latencyAvg
     data['latency'] = latencies
-    prefix = dirPath.rstrip('/') # remove righ-most slashes
+    prefix = dirPaths[0].rstrip('/') # remove righ-most slashes
     fileName = '{}.json'.format(prefix)
     with open(fileName, 'w') as f:
         json.dump(data, f)
@@ -65,18 +73,18 @@ def extract(dirName, config):
 
 
 
-            
+
 #####
 ##### Main
 #####
 
 if __name__ == "__main__":
     if len(sys.argv) < 3 or (sys.argv[1] != "bftsmart" and sys.argv[1] != "hotstuff"):
-        print("Expected two arguments: <bftsmart|hotstuff> <directory containing all .{err,out} files for one run>")
+        print("Expected at least two arguments: <bftsmart|hotstuff> <directories containing all .{err,out} files for one run>")
         sys.exit(1)
 
     cfg = bftsmartConfig
     if sys.argv[1] == "hotstuff":
         cfg = hotstuffConfig
 
-    extract(sys.argv[2], cfg)
+    extract(cfg, sys.argv[2:])

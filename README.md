@@ -21,7 +21,7 @@ Repository containing the scripts used to extract, aggregate, analyze and visual
 ### 2. Extract and aggregate data
 
 The following assumes that each run of each system configuration has been executed.
-Different systems require different scripts to parse the logs but they all output `.json` files for uniformity. You will need to create directories to sort the evaluation files generated for the BFT-SMaRt, HotStuff and Bullshark baselines; feel free to use symbolic links to avoid moving or duplicating many large files (`ln -s <origin> <destination>`).
+Different systems require different scripts to parse the logs but they all output `.json` files for uniformity. Feel free to create directories or use symbolic links to sort the evaluation files generated for the BFT-SMaRt, HotStuff and Bullshark baselines.
 
 For comparison, the archive `sorted-results-little-boy.tar.xz` (435 MB decompressed) contains the directory tree, the dead symlinks and the aggregated `.json` files of the baselines, as used in the paper. The archive `agg-data.tar.xz` (83 MB decompressed) contains all the aggregated `.json` files needed for the plots (some duplicated from the sorted results).
 
@@ -46,13 +46,13 @@ The script `extract_bftsmart_hotstuff.py` must be run once per evaluation run. F
 **Inputs**:
 
 1. `bftsmart` or `hotstuff` depending on the system configuration to parse;
-2. A directory `DIR` that contains 80 `.out` and 80 `.err` files of a single run (16 honest clients + 64 load clients).
+2. One or several directories `DIRS` that contain in total 80 `.out` and 80 `.err` files of a single run (16 honest clients + 64 load clients). The script searches for these files recursively.
 
-**Outputs**: `DIR.json` located in the same directory as `DIR`.
+**Outputs**: `DIR.json` located in the same directory as the first item in the list `DIRS`.
 
 ```
-python3 extract_bftsmart_hotstuff.py bftsmart <DIR>
-python3 extract_bftsmart_hotstuff.py hotstuff <DIR>
+python3 extract_bftsmart_hotstuff.py bftsmart <DIRS...>
+python3 extract_bftsmart_hotstuff.py hotstuff <DIRS...>
 ```
 
 
@@ -60,7 +60,7 @@ python3 extract_bftsmart_hotstuff.py hotstuff <DIR>
 
 The script `extract_bullshark.py` must be run once per evaluation run as with `bftsmart_hotstuff.py`. The script is mostly copied from the original Bullshark's `easy_log.py`. The main changes are around lines 375 to generate a `.json` containing the latency distribution and to include the logs of the worker nodes.
 
-**Inputs**: a directory `DIR` that contains the `.out` and `.err` files of a single run, as with `bftsmart_hotstuff.py`.
+**Inputs**: a directory `DIR` that contains the `.out` and `.err` files of a single run. The script searches for these files recursively.
 
 **Outputs**: `DIR.easier-log.json` located in the same directory as `DIR`.
 

@@ -42,6 +42,11 @@ def init():
     plt.rc('legend',  fontsize=FONT_SIZE_M) # legend
     plt.rc('figure', titlesize=FONT_SIZE_L) # overarching figure title
 
+    ### USENIX requirement: no Type 3 fonts
+    ### http://phyletica.org/matplotlib-fonts
+    plt.rcParams['pdf.fonttype'] = 42
+    plt.rcParams['ps.fonttype'] = 42
+
 
 def commonFigFormat(ax):
     ### Grid behind the lines/bars
